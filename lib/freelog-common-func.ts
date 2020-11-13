@@ -1,5 +1,12 @@
 import {isNullOrUndefined, isNumber, isObject, isString} from 'util';
-import {ErrCodeEnum, RetCodeEnum, ApiInvokingError, ApplicationError, FreelogContext, IApiDataFormat} from '../index';
+import {
+    ErrCodeEnum,
+    RetCodeEnum,
+    ApiInvokingError,
+    ApplicationError,
+    FreelogContext,
+    IApiDataFormat
+} from '../index';
 
 export function buildApiFormatData(ret: RetCodeEnum, errCode: ErrCodeEnum, msg: string, data: any): IApiDataFormat {
     return {

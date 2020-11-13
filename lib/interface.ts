@@ -1,7 +1,6 @@
 import {Stream} from "stream";
-import {ErrCodeEnum, RetCodeEnum} from "./enum";
 import {Context, Application} from 'egg';
-import {ApplicationErrorBase} from "./errors";
+import {ErrCodeEnum, RetCodeEnum, SubjectAuthCodeEnum, SubjectTypeEnum, ApplicationErrorBase} from "../index";
 
 export interface IApiDataFormat {
     ret: RetCodeEnum;
@@ -70,6 +69,12 @@ export interface FreelogContext extends Context {
      * @param targetId
      */
     entityUserAuthorization(this: FreelogContext, entity: object | null, property?: string, targetId?: number): FreelogContext;
+
+    /**
+     * 访客身份认证与授权
+     * @param identityType
+     */
+    validateVisitorIdentity(this: FreelogContext, identityType: number): FreelogContext;
 }
 
 export interface IRestfulWebApi {
@@ -181,3 +186,18 @@ export interface IMongodbOperation<T> extends IDataBaseOperation {
 
     deleteMany(condition): Promise<{ n: number, nModified: number, ok: number }>;
 }
+
+export interface ISubjectAuthResult {
+
+    referee: SubjectTypeEnum;
+
+    authCode: SubjectAuthCodeEnum;
+
+    data?: any;
+
+    errorMsg?: string;
+
+    isAuth: boolean;
+}
+
+

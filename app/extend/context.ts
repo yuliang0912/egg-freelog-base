@@ -3,8 +3,8 @@ import {isError, isObject, isString} from 'util'
 import {hmacSha1, base64Encode} from '../../lib/crypto-helper';
 import {buildApiFormatData, convertIntranetApiResponseData, entityNullObjectCheck} from '../../lib/freelog-common-func';
 import {
-    ErrCodeEnum, RetCodeEnum, FreelogContext, IRestfulWebApi,
-    AutoSnapError, ApplicationErrorBase, ArgumentError, ApiInvokingError, AuthorizationError
+    ErrCodeEnum, RetCodeEnum, FreelogContext, IRestfulWebApi, IdentityTypeEnum,
+    AutoSnapError, ApplicationErrorBase, ArgumentError, ApiInvokingError, AuthorizationError,
 } from '../../index';
 
 export default {
@@ -49,6 +49,33 @@ export default {
      */
     isInternalClient(this: FreelogContext): boolean {
         return (this.clientId ?? 0) > 0;
+    },
+
+    /**
+     * 访客身份认证与授权
+     * @param identityType
+     */
+    validateVisitorIdentity(this: FreelogContext, identityType: number = 6): FreelogContext {
+
+        const {InternalClient, LoginUser, UnLoginUser, LoginUserAndInternalClient, UnLoginUserAndInternalClient} = IdentityTypeEnum
+
+        if ((identityType & InternalClient) === InternalClient && this.isInternalClient()) {
+            return this
+        }
+        if ((identityType & LoginUser) === LoginUser && this._isLoginUser()) {
+            return this
+        }
+        if ((identityType & UnLoginUser) === UnLoginUser && !this._isLoginUser()) {
+            return this
+        }
+        if (identityType === LoginUserAndInternalClient && this._isLoginUser() && this._isInternalClient()) {
+            return this
+        }
+        if (identityType === UnLoginUserAndInternalClient && !this._isLoginUser() && this._isInternalClient()) {
+            return this
+        }
+
+        throw new AuthorizationError(this.gettext('user-authorization-failed'));
     },
 
     /**
