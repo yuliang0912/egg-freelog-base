@@ -1,0 +1,60 @@
+{
+  "name": "egg-freelog-base",
+  "version": "3.0.0",
+  "description": "飞致网络nodeJs-egg微服务基础框架.",
+  "private": false,
+  "egg": {
+    "typescript": true,
+    "declarations": true
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "egg": "^2.6.1",
+    "jsonschema": "^1.4.0",
+    "koa-validate": "^1.0.7",
+    "mongoose": "^5.10.14"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.40",
+    "@types/node": "^7.0.12",
+    "@types/supertest": "^2.0.0",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-ci": "^1.8.0",
+    "egg-bin": "^4.11.0",
+    "egg-mock": "^3.16.0",
+    "tslib": "^1.9.0",
+    "eslint": "^6.7.2",
+    "eslint-config-egg": "^8.0.0",
+    "typescript": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "eslintIgnore": [
+    "coverage"
+  ],
+  "files": [
+    "app",
+    "config",
+    "lib",
+    "database",
+    "index.ts",
+    "index.js",
+    "index.d.ts",
+    "app.ts",
+    "app.d.ts",
+    "app.js"
+  ],
+  "author": "yu.liang@freelog.com",
+  "license": "MIT"
+}
