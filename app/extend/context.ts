@@ -38,6 +38,22 @@ export default {
     },
 
     /**
+     * 验证参数
+     * @returns {exports}
+     */
+    validateParams(this: FreelogContext): FreelogContext {
+
+        if (!this.errors.length) {
+            return this;
+        }
+        const fields: string[] = [];
+        for (const error of this.errors) {
+            Object.keys(error).forEach(x => fields.push(x));
+        }
+        throw new ArgumentError(this.gettext('params-validate-failed', fields.toString()), this.errors);
+    },
+
+    /**
      * 是否是登录用户
      */
     isLoginUser(this: FreelogContext): boolean {

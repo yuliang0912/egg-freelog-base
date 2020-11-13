@@ -1,6 +1,7 @@
 import {Stream} from "stream";
 import {Context, Application} from 'egg';
 import {ErrCodeEnum, RetCodeEnum, SubjectAuthCodeEnum, SubjectTypeEnum, ApplicationErrorBase} from "../index";
+import {ValidatorResult} from "jsonschema";
 
 export interface IApiDataFormat {
     ret: RetCodeEnum;
@@ -38,7 +39,7 @@ export interface FreelogContext extends Context {
 
     webApi: IRestfulWebApi;
 
-    errors: string[];
+    errors: object[];
 
     bodyParserError?: Error;
 
@@ -53,6 +54,8 @@ export interface FreelogContext extends Context {
      * @param errorInfo
      */
     error(this: FreelogContext, errorInfo: ApplicationErrorBase | Error | string | undefined): void;
+
+    validateParams(this: FreelogContext): FreelogContext;
 
     /**
      * 实体空值校验
@@ -75,6 +78,8 @@ export interface FreelogContext extends Context {
      * @param identityType
      */
     validateVisitorIdentity(this: FreelogContext, identityType: number): FreelogContext;
+
+    curlIntranetApi(this: FreelogContext, url: string, options?: object): Promise<any>;
 }
 
 export interface IRestfulWebApi {
@@ -88,6 +93,10 @@ export interface IRestfulWebApi {
     presentableInfoV2: string;
     contractInfoV2: string;
     authInfoV2: string;
+}
+
+export interface IJsonSchemaValidate {
+    validate(instance: object[] | object, ...args): ValidatorResult;
 }
 
 export interface IObjectStorageService {
@@ -185,6 +194,8 @@ export interface IMongodbOperation<T> extends IDataBaseOperation {
     deleteOne(...args): Promise<{ n: number, nModified: number, ok: number }>;
 
     deleteMany(condition): Promise<{ n: number, nModified: number, ok: number }>;
+
+    findOneAndUpdate(condition, ...args): Promise<T>;
 }
 
 export interface ISubjectAuthResult {

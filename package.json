@@ -1,6 +1,6 @@
 {
   "name": "egg-freelog-base",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "description": "飞致网络nodeJs-egg微服务基础框架.",
   "private": false,
   "egg": {
