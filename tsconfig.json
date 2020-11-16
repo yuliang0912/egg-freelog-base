@@ -21,9 +21,11 @@
     "skipDefaultLibCheck": true,
     "inlineSourceMap": true,
     "importHelpers": true,
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "exclude": [
+    "dist",
     "app/public",
     "app/views",
     "node_modules*",
