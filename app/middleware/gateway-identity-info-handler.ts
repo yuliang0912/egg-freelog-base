@@ -11,13 +11,17 @@ export default function fooMiddleware(): any {
             await next();
             return;
         }
-
-        const identityInfo = JSON.parse(Buffer.from(authTokenStr, 'base64').toString());
-        const {userInfo, nodeInfo, clientInfo} = identityInfo;
-        ctx.userId = userInfo?.userId ?? 0;
-        ctx.nodeId = nodeInfo?.nodeId ?? 0;
-        ctx.clientId = clientInfo?.clientId ?? 0;
-        ctx.identityInfo = identityInfo ?? {};
+        
+        try {
+            const identityInfo = JSON.parse(Buffer.from(authTokenStr, 'base64').toString());
+            const {userInfo, nodeInfo, clientInfo} = identityInfo;
+            ctx.userId = userInfo?.userId ?? 0;
+            ctx.nodeId = nodeInfo?.nodeId ?? 0;
+            ctx.clientId = clientInfo?.clientId ?? 0;
+            ctx.identityInfo = identityInfo ?? {};
+        } catch (e) { // 一般是json解析失败
+            console.warn('middleware:gateway-identity-info-handler exec exception. detail:' + e.toString())
+        }
 
         await next();
     };

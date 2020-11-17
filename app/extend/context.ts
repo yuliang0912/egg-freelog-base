@@ -136,7 +136,8 @@ export default {
      * 内部服务restful-url前缀部分
      */
     get webApi(): IRestfulWebApi {
-        return (this as any).app.webApi;
+        const that = (this as any) as FreelogContext;
+        return that.app.webApi;
     },
 
     /**
@@ -188,7 +189,7 @@ export default {
 
         return this.curl(url, opt).then(response => {
             if (resFormat === CurlResFormatEnum.FreelogApiData) {
-                // freelog标准返回格式为 {ret:number,retCode:number,data:any }
+                // freelog标准返回格式为 {ret:number,errCode:number,data:any }
                 return convertIntranetApiResponseData(response.data, url, options)
             } else if (resFormat === CurlResFormatEnum.OriginalData) {
                 return response.data;
@@ -199,5 +200,4 @@ export default {
             throw new ApiInvokingError(error.message || error.toString(), {url, options});
         })
     }
-
 };

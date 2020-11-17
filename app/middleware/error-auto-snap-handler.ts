@@ -1,5 +1,5 @@
 import {isUndefined, isError} from 'util';
-import {buildApiFormatData, initSetFreelogContextProperty, jsonStringify} from '../../lib/freelog-common-func'
+import {buildApiFormatData, jsonStringify} from '../../lib/freelog-common-func'
 import {
     FreelogContext, ErrCodeEnum, RetCodeEnum, ApplicationErrorBase,
     ApplicationRouterMatchError, ArgumentError, FreelogApplication
@@ -7,10 +7,16 @@ import {
 
 async function errorAutoSnapAndHandle(ctx: FreelogContext, next: () => Promise<any>): Promise<void> {
 
-    initSetFreelogContextProperty(ctx);
+    ctx.userId = 0;
+    ctx.nodeId = 0;
+    ctx.clientId = 0;
+    ctx.errors = [];
+    ctx.identityInfo = {};
+    ctx.error = ctx.error.bind(ctx);
+    ctx.success = ctx.success.bind(ctx);
 
     if (isError(ctx.bodyParserError)) {
-        throw new ArgumentError('bodyParse数据转换异常,请检查传入的数据是否符合接口规范', {detail: ctx.message});
+        throw new ArgumentError('bodyParse数据转换异常,请检查传入的数据是否符合接口规范', {detail: ctx.bodyParserError.message});
     }
 
     await next();

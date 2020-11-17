@@ -11,7 +11,7 @@ export default {
      * 内部网络URL地址
      */
     get webApi(): IRestfulWebApi {
-        const that = this as any;
+        const that = (this as any) as FreelogApplication;
         const baseUrl = that.config.gatewayUrl;
         if (!this[RESTFUL_WEB_API]) {
             that.addSingleton(RESTFUL_WEB_API, new RestFulWebApis(baseUrl));
