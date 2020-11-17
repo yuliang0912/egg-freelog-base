@@ -23,11 +23,17 @@ async function createConnection(app: FreelogApplication, mongoose, config) {
     });
 
     database.Schema = mongoose.Schema;
+
+    let isConnecting = false;
     database.reconnect = function () {
-        if (database._readyState === 0) {
-            return createConnection(app, mongoose, config).catch(connectionErrorHandler);
+        if (database._readyState === 0 && !isConnecting) {
+            isConnecting = true;
+            return createConnection(app, mongoose, config).catch(connectionErrorHandler).finally(() => {
+                isConnecting = false;
+            });
         }
     }
+
     database.getNewObjectId = () => {
         return new mongoose.Types.ObjectId;
     }
@@ -42,7 +48,7 @@ async function createConnection(app: FreelogApplication, mongoose, config) {
 }
 
 function connectionErrorHandler(error) {
-    console.log('mongodb connection failed!' + error.toString())
+    console.log('mongodb connection failed, ' + error.toString())
 }
 
 export default async function (app: FreelogApplication) {
@@ -60,13 +66,13 @@ export default async function (app: FreelogApplication) {
         useCreateIndex: true,
         bufferCommands: false,
         useFindAndModify: false,
-        autoIndex: true, // Don't build indexes
-        poolSize: 8, // Maintain up to 10 socket connections
+        autoIndex: true, //auto build indexes
+        poolSize: 5, // Maintain up to 10 socket connections
         serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
         socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
         family: 4 // Use IPv4, skip trying IPv6
     }, config.options ?? {});
-    
+
     app.beforeStart(async () => {
         await createConnection(app, mongoose, config).catch(connectionErrorHandler);
     });

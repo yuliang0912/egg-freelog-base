@@ -2,8 +2,24 @@ import {EggAppConfig, EggAppInfo, PowerPartial} from 'egg';
 import {FreelogContext, ErrCodeEnum, RetCodeEnum} from "../index";
 import {buildApiFormatData} from '../lib/freelog-common-func'
 
+export interface FreelogFrameworkDefaultConfig {
+    gatewayUrl: string;
+    uploadConfig: {
+        aliOss: {
+            enable: boolean;
+            [key: string]: any;
+        };
+        amzS3: {
+            enable: boolean;
+            [key: string]: any;
+        }
+    }
+}
+
+export type DefaultConfig = PowerPartial<EggAppConfig & FreelogFrameworkDefaultConfig>
+
 export default (appInfo: EggAppInfo) => {
-    const config = {} as PowerPartial<EggAppConfig>;
+    const config = {} as PowerPartial<EggAppConfig> & FreelogFrameworkDefaultConfig;
 
     config.keys = appInfo.name;
 

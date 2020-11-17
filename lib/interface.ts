@@ -1,6 +1,13 @@
 import {Stream} from "stream";
 import {Context, Application} from 'egg';
-import {ErrCodeEnum, RetCodeEnum, SubjectAuthCodeEnum, SubjectTypeEnum, ApplicationErrorBase} from "../index";
+import {
+    ErrCodeEnum,
+    RetCodeEnum,
+    SubjectAuthCodeEnum,
+    SubjectTypeEnum,
+    ApplicationErrorBase,
+    CurlResFormatEnum
+} from "../index";
 import {ValidatorResult} from "jsonschema";
 
 export interface IApiDataFormat {
@@ -23,7 +30,7 @@ export interface FreelogRequestIdentityInfo {
 
 export interface FreelogApplication extends Application {
 
-    webApi(): IRestfulWebApi;
+    webApi: IRestfulWebApi;
 
     koaValidateExtend?: object;
 }
@@ -79,7 +86,7 @@ export interface FreelogContext extends Context {
      */
     validateVisitorIdentity(this: FreelogContext, identityType: number): FreelogContext;
 
-    curlIntranetApi(this: FreelogContext, url: string, options?: object): Promise<any>;
+    curlIntranetApi(this: FreelogContext, url: string, options?: object, resFormat?: CurlResFormatEnum)
 }
 
 export interface IRestfulWebApi {
@@ -200,6 +207,9 @@ export interface IMongodbOperation<T> extends IDataBaseOperation {
 
 export interface ISubjectAuthResult {
 
+    /**
+     * 做出本次授权结果判定的服务
+     */
     referee: SubjectTypeEnum;
 
     authCode: SubjectAuthCodeEnum;
@@ -209,6 +219,28 @@ export interface ISubjectAuthResult {
     errorMsg?: string;
 
     isAuth: boolean;
+}
+
+export interface PageResult<T> {
+    /**
+     * 当前页码(1开始)
+     */
+    page: number;
+
+    /**
+     * 每页数量
+     */
+    pageSize: number;
+
+    /**
+     * 总数量
+     */
+    totalItem: number;
+
+    /**
+     * 当前分页的数据集
+     */
+    dataList: T[];
 }
 
 

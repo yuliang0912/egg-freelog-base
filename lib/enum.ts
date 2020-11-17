@@ -161,7 +161,7 @@ export enum SubjectTypeEnum {
 }
 
 /**
- * 合同类型
+ * 合同乙方的身份类型
  */
 export enum ContractLicenseeIdentityTypeEnum {
     /**
@@ -323,5 +323,14 @@ export enum SubjectAuthCodeEnum {
      * 授权数据校验失败错误
      */
     AuthDataValidateFailedError = 902
+}
+
+export enum CurlResFormatEnum {
+
+    Original = 1,
+
+    FreelogApiData = 2,
+
+    OriginalData = 3
 }
 

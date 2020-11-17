@@ -1,10 +1,19 @@
 import {parse} from 'url';
-import {isError, isObject, isString} from 'util'
-import {hmacSha1, base64Encode} from '../../lib/crypto-helper';
+import {isError, isString} from 'util'
+import {base64Encode, hmacSha1} from '../../lib/crypto-helper';
 import {buildApiFormatData, convertIntranetApiResponseData, entityNullObjectCheck} from '../../lib/freelog-common-func';
 import {
-    ErrCodeEnum, RetCodeEnum, FreelogContext, IRestfulWebApi, IdentityTypeEnum,
-    AutoSnapError, ApplicationErrorBase, ArgumentError, ApiInvokingError, AuthorizationError,
+    ApiInvokingError,
+    ApplicationErrorBase,
+    ArgumentError,
+    AuthorizationError,
+    AutoSnapError,
+    CurlResFormatEnum,
+    ErrCodeEnum,
+    FreelogContext,
+    IdentityTypeEnum,
+    IRestfulWebApi,
+    RetCodeEnum,
 } from '../../index';
 
 export default {
@@ -13,7 +22,7 @@ export default {
      * 响应成功的消息
      * @param data
      */
-    success(this: FreelogContext, data: any): FreelogContext {
+    success(this: FreelogContext, data: object | any[] | string | number | boolean): FreelogContext {
         this.body = buildApiFormatData(RetCodeEnum.success, ErrCodeEnum.success, 'success', data);
         return this;
     },
@@ -34,7 +43,7 @@ export default {
         if (isErrorParam) {
             throw {...(errorInfo as Error), ...{retCode: RetCodeEnum.success, errCode: ErrCodeEnum.autoSnapError}};
         }
-        throw new AutoSnapError(isString(errorInfo) ? errorInfo as string : '接口内部异常')
+        throw new AutoSnapError(isString(errorInfo) ? errorInfo as string : '接口内部异常');
     },
 
     /**
@@ -78,16 +87,16 @@ export default {
         if ((identityType & InternalClient) === InternalClient && this.isInternalClient()) {
             return this
         }
-        if ((identityType & LoginUser) === LoginUser && this._isLoginUser()) {
+        if ((identityType & LoginUser) === LoginUser && this.isLoginUser()) {
             return this
         }
-        if ((identityType & UnLoginUser) === UnLoginUser && !this._isLoginUser()) {
+        if ((identityType & UnLoginUser) === UnLoginUser && !this.isLoginUser()) {
             return this
         }
-        if (identityType === LoginUserAndInternalClient && this._isLoginUser() && this._isInternalClient()) {
+        if (identityType === LoginUserAndInternalClient && this.isLoginUser() && this.isInternalClient()) {
             return this
         }
-        if (identityType === UnLoginUserAndInternalClient && !this._isLoginUser() && this._isInternalClient()) {
+        if (identityType === UnLoginUserAndInternalClient && !this.isLoginUser() && this.isInternalClient()) {
             return this
         }
 
@@ -143,14 +152,14 @@ export default {
      * @param url
      * @param options
      */
-    async curlIntranetApi(this: FreelogContext, url: string, options?: object) {
+    async curlIntranetApi(this: FreelogContext, url: string, options?: object, resFormat: CurlResFormatEnum = CurlResFormatEnum.FreelogApiData) {
 
         const {clientCredentialInfo} = this.app.config;
         if (!clientCredentialInfo) {
             throw new ArgumentError('未找到clientCredentialInfo配置信息')
         }
 
-        const opt = Object.assign({headers: {}, dataType: 'json'}, options);
+        const opt = Object.assign({headers: {}, dataType: 'json'}, options ?? {});
         const timeLine = Math.round(new Date().getTime() / 1000);
         const text = `${parse(url).path}&timeline=${timeLine}`;
 
@@ -177,20 +186,18 @@ export default {
             opt.headers['accept-language'] = this.get('accept-language');
         }
 
-        return this.curl(url, opt).catch(error => {
-            throw new ApiInvokingError(error.message || error.toString(), {url, options});
-        }).then(response => {
-            const contentType = response.res.headers['content-type'];
-            if (opt.dataType === 'original') {
-                return response;
-            } else if (isObject(response.data)) {
-                return convertIntranetApiResponseData(response.data, url, options);
-            } else if (contentType && contentType.toLowerCase().includes('application/json')) {
-                return convertIntranetApiResponseData(JSON.parse(response.data.toString()), url, options);
+        return this.curl(url, opt).then(response => {
+            if (resFormat === CurlResFormatEnum.FreelogApiData) {
+                // freelog标准返回格式为 {ret:number,retCode:number,data:any }
+                return convertIntranetApiResponseData(response.data, url, options)
+            } else if (resFormat === CurlResFormatEnum.OriginalData) {
+                return response.data;
             } else {
-                return response.data.toString();
+                return response;
             }
-        });
+        }).catch(error => {
+            throw new ApiInvokingError(error.message || error.toString(), {url, options});
+        })
     }
 
 };

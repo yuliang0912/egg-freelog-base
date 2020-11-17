@@ -3,7 +3,7 @@ import {FreelogApplication} from './index';
 import * as koaValidateExtend from './lib/koa-validate-extend';
 import {loaderCustomDirAndFile} from './lib/loader-custom-dir-and-file';
 import mongoose from './database/mongoose'
-import { IBoot } from 'egg';
+import {IBoot} from 'egg';
 
 const koaValidate = require('koa-validate')
 
@@ -14,6 +14,10 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
 
     constructor(app: FreelogApplication) {
         this.app = app;
+    }
+
+    configWillLoad() {
+        
     }
 
     async willReady() {

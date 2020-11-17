@@ -22,10 +22,10 @@
     "inlineSourceMap": true,
     "importHelpers": true,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "release"
   },
   "exclude": [
-    "dist",
+    "release",
     "app/public",
     "app/views",
     "node_modules*",

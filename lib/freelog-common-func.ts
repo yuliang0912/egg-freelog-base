@@ -15,26 +15,26 @@ export function buildApiFormatData(ret: RetCodeEnum, errCode: ErrCodeEnum, msg: 
 }
 
 export function initSetFreelogContextProperty(ctx: FreelogContext) {
-    ctx.success.bind(ctx);
-    ctx.error.bind(ctx);
-    ctx.identityInfo = {};
-    ctx.errors = [];
     ctx.userId = 0;
-    ctx.clientId = 0;
     ctx.nodeId = 0;
+    ctx.clientId = 0;
+    ctx.errors = [];
+    ctx.identityInfo = {};
+    ctx.error = ctx.error.bind(ctx);
+    ctx.success = ctx.success.bind(ctx);
 }
 
 export async function convertIntranetApiResponseData(data: any, url: string, options?: object) {
     if (isNullOrUndefined(data)) {
         throw new ApiInvokingError('api response data is null', {url, options});
     }
-    if (isNumber(data?.retcode)) {
-        data.retCode = data.retcode; // 兼容旧版
+    if (Reflect.has(data, 'errcode') && isNumber(data.errcode)) {
+        data.errCode = data.errcode; // 兼容旧版
     }
-    if (!isNumber(data.ret) || !isNumber(data.errCode)) {
+    if (Object.prototype.toString.call(data) !== '[object Object]' || !isNumber(data.ret) || !isNumber(data.errCode)) {
         throw new ApiInvokingError('api response data is error format');
     }
-    if (data.ret !== RetCodeEnum.success || data.retCode !== ErrCodeEnum.success) {
+    if (data.ret !== RetCodeEnum.success || data.errCode !== ErrCodeEnum.success) {
         throw new ApiInvokingError(data.msg ?? 'null error msg', {url, options, apiInvokingAttachData: data.data});
     }
     return data.data;

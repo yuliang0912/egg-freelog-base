@@ -1,6 +1,6 @@
 {
   "name": "egg-freelog-base",
-  "version": "3.0.7",
+  "version": "3.0.0",
   "description": "飞致网络nodeJs-egg微服务基础框架.",
   "private": false,
   "egg": {
@@ -45,13 +45,11 @@
   ],
   "files": [
     "*.d.ts",
-    "app/*.js",
-    "app/extend/*.js",
-    "app/middleware/*.js",
-    "config/*.js",
-    "lib/*.js",
-    "database/*.js",
+    "app",
+    "database",
+    "lib",
     "index.js",
+    "index.d.ts",
     "app.js"
   ],
   "author": "yu.liang@freelog.com",

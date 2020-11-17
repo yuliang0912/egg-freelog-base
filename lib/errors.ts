@@ -19,7 +19,6 @@ class ApplicationErrorBase extends Error {
 }
 
 class AutoSnapError extends ApplicationErrorBase {
-
 }
 
 /**
