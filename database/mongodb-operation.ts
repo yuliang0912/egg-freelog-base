@@ -15,7 +15,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
      * @returns {*}
      */
     get model() {
-        if (!this._schema.db._readyState) {
+        if (this._schema.db.readyState !== 1) {
             throw new DatabaseConnectionError('database connection error!');
         }
         return this._schema;

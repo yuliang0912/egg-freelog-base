@@ -1,11 +1,11 @@
 import {parse} from 'url';
-import {isError, isString} from 'util'
+import {isError, isNullOrUndefined, isObject, isString} from 'util'
 import {base64Encode, hmacSha1} from '../../lib/crypto-helper';
-import {buildApiFormatData, convertIntranetApiResponseData, entityNullObjectCheck} from '../../lib/freelog-common-func';
+import {buildApiFormatData, convertIntranetApiResponseData} from '../../lib/freelog-common-func';
 import {
-    ApiInvokingError,
+    ApiInvokingError, ApplicationError,
     ApplicationErrorBase,
-    ArgumentError,
+    ArgumentError, AuthenticationError,
     AuthorizationError,
     AutoSnapError,
     CurlResFormatEnum,
@@ -106,26 +106,31 @@ export default {
     /**
      * 实体空值校验
      * @param entity
-     * @param msg
-     * @param data
+     * @param options
      */
-    entityNullObjectCheck(this: FreelogContext, entity: object | null, msg?: string, data?: any): FreelogContext {
-        entityNullObjectCheck(entity, msg, data);
+    entityNullObjectCheck(this: FreelogContext, entity: object | null, options?: { msg?: string, data?: any }): FreelogContext {
+        if (isNullOrUndefined(entity) || !isObject(entity)) {
+            throw new ApplicationError(isString(options?.msg) ? options?.msg as string : 'entity is null', options?.data);
+        }
         return this;
     },
 
     /**
      * 用户身份ID与实体的用户属性之间是否匹配校验
      * @param entity
-     * @param property
-     * @param targetId
+     * @param options
      */
-    entityUserAuthorization(this: FreelogContext, entity: object | null, property = 'userId', targetId?: number): FreelogContext {
+    entityNullValueAndUserAuthorizationCheck(this: FreelogContext, entity: object | null, options?: { msg?: string, data?: any, property?: string }): FreelogContext {
 
-        this.entityNullObjectCheck(entity);
-        targetId = targetId ?? this.userId;
+        if (!this.isLoginUser()) {
+            throw new AuthenticationError(this.gettext('user-authentication-failed'))
+        }
 
-        if (entity?.[property] !== targetId) {
+        this.entityNullObjectCheck(entity, options);
+
+        const property = options?.property ?? 'userId';
+
+        if (entity?.[property] !== this.userId) {
             throw new AuthorizationError(this.gettext('user-authorization-failed'));
         }
 

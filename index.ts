@@ -7,8 +7,10 @@ export * from './lib/enum';
 export * from './lib/interface';
 export * from './lib/jwt-helper';
 export * from './lib/common-json-schema';
-export * from './database/mongodb-operation';
 export * from './lib/visitor-identity-validator';
+export * from './database/interface'
+export * from './database/mongodb-operation';
+export * from './database/mongoose-model-base'
 
 export const CommonRegex = commonRegex;
 export const CryptoHelper = cryptoHelper;

@@ -1,10 +1,8 @@
-import {isNullOrUndefined, isNumber, isObject, isString} from 'util';
+import {isNullOrUndefined, isNumber} from 'util';
 import {
     ErrCodeEnum,
     RetCodeEnum,
     ApiInvokingError,
-    ApplicationError,
-    FreelogContext,
     IApiDataFormat
 } from '../index';
 
@@ -12,16 +10,6 @@ export function buildApiFormatData(ret: RetCodeEnum, errCode: ErrCodeEnum, msg: 
     return {
         ret, errCode, msg, data: isNullOrUndefined(data) ? null : data
     }
-}
-
-export function initSetFreelogContextProperty(ctx: FreelogContext) {
-    ctx.userId = 0;
-    ctx.nodeId = 0;
-    ctx.clientId = 0;
-    ctx.errors = [];
-    ctx.identityInfo = {};
-    ctx.error = ctx.error.bind(ctx);
-    ctx.success = ctx.success.bind(ctx);
 }
 
 export async function convertIntranetApiResponseData(data: any, url: string, options?: object) {
@@ -38,12 +26,6 @@ export async function convertIntranetApiResponseData(data: any, url: string, opt
         throw new ApiInvokingError(data.msg ?? 'null error msg', {url, options, apiInvokingAttachData: data.data});
     }
     return data.data;
-}
-
-export function entityNullObjectCheck(entity: object | null, msg?: string, data?: any) {
-    if (isNullOrUndefined(entity) || !isObject(entity)) {
-        throw new ApplicationError(isString(msg) ? msg : 'entity is null', data);
-    }
 }
 
 export function isClass(fn): boolean {

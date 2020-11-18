@@ -2,49 +2,50 @@ import {FreelogApplication} from "../index";
 
 async function createConnection(app: FreelogApplication, mongoose, config) {
 
-    const database = mongoose.createConnection(config.url, config.options)
+    /**
+     * wiki:https://mongoosejs.com/docs/api/connection.html
+     */
+    const connection = mongoose.createConnection(config.url, config.options)
 
     // 连接成功
-    database.on('connected', function () {
+    connection.on('connected', function () {
         console.log('Mongoose connection open to ' + config.url);
     });
 
     // 连接失败
-    database.on('error', connectionErrorHandler);
+    connection.on('error', connectionErrorHandler);
 
     // 断开连接
-    database.on('disconnected', function () {
+    connection.on('disconnected', function () {
         console.log('Mongoose connection disconnected');
     })
 
-    //重新连接
-    database.on('reconnected', () => {
-        app.coreLogger.info(`[egg-freelog-mongoose] ${config.url} reconnected successfully`);
-    });
+    connection.Schema = mongoose.Schema;
 
-    database.Schema = mongoose.Schema;
-
-    let isConnecting = false;
-    database.reconnect = function () {
-        if (database._readyState === 0 && !isConnecting) {
-            isConnecting = true;
-            return createConnection(app, mongoose, config).catch(connectionErrorHandler).finally(() => {
-                isConnecting = false;
-            });
+    connection.reconnect = function () {
+        /**
+         * Connection ready state
+         0 = disconnected
+         1 = connected
+         2 = connecting
+         3 = disconnecting
+         */
+        if (connection.readyState === 0) {
+            return createConnection(app, mongoose, config).catch(connectionErrorHandler);
         }
     }
 
-    database.getNewObjectId = () => {
+    connection.getNewObjectId = () => {
         return new mongoose.Types.ObjectId;
     }
-    database.convertObjectId = (strId) => {
+    connection.convertObjectId = (strId) => {
         return new mongoose.Types.ObjectId(strId);
     }
 
-    app['mongoose'] = database;
+    app['mongoose'] = connection;
     app['_mongoose'] = mongoose;
 
-    return database;
+    return connection;
 }
 
 function connectionErrorHandler(error) {
