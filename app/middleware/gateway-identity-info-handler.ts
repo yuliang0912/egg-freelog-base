@@ -1,7 +1,7 @@
 import {isString} from 'util';
-import {FreelogContext} from '../../index';
+import {FreelogApplication, FreelogContext} from '../../index';
 
-export default function fooMiddleware(): any {
+export default function gatewayIdentityInfoHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
     return async (ctx: FreelogContext, next: () => Promise<any>) => {
 

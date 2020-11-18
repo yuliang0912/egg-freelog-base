@@ -31,7 +31,7 @@ async function errorAutoSnapAndHandle(ctx: FreelogContext, next: () => Promise<a
     }
 }
 
-export default function fooMiddleware(_, app: FreelogApplication): any {
+export default function errorAutoSnapHandleMiddleware(_options: object | null, app: FreelogApplication): any {
 
     return async (ctx: FreelogContext, next: () => Promise<any>) => {
         try {

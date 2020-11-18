@@ -1,7 +1,7 @@
 import {isString} from 'util';
-import {FreelogContext, JwtHelper} from '../../index';
+import {FreelogApplication, FreelogContext, JwtHelper} from '../../index';
 
-export default function fooMiddleware(): any {
+export default function jwtIdentityInfoHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
     return async (ctx: FreelogContext, next: () => Promise<any>) => {
 

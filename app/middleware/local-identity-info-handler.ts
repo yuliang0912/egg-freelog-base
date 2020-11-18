@@ -1,7 +1,6 @@
-import {isObject} from 'util';
 import {FreelogApplication, FreelogContext} from '../../index';
 
-export default function fooMiddleware(_, app: FreelogApplication): any {
+export default function localIdentityInfoMiddleware(_options: object | null, app: FreelogApplication): any {
 
     return async (ctx: FreelogContext, next: () => Promise<any>) => {
 
@@ -11,15 +10,16 @@ export default function fooMiddleware(_, app: FreelogApplication): any {
         }
 
         const localIdentityInfo = app.config.localIdentity;
-        if (!isObject(localIdentityInfo)) {
+
+        if (Object.prototype.toString.call(localIdentityInfo) !== '[object Object]') {
             return await next();
         }
 
-        ctx.userId = localIdentityInfo.userId;
         ctx.identityInfo.userInfo = {
-            userId: localIdentityInfo.userId ?? 0,
-            username: localIdentityInfo.username ?? ''
+            userId: localIdentityInfo?.userId ?? 0,
+            username: localIdentityInfo?.username ?? ''
         };
+        ctx.userId = ctx.identityInfo.userInfo.userId;
 
         await next();
     };
