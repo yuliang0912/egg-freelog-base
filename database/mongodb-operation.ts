@@ -1,6 +1,12 @@
 import {isNumber} from 'util';
 import {DatabaseConnectionError, IMongodbOperation} from '../index';
 
+/**
+ * 实现了接口IMongodbOperation=>IDataBaseOperation.针对所有的DB操作进行了统一API的封装.
+ * 最终实际调用依然是通过mongoose-model来处理数据的.
+ * 具体全部的函数参考wiki:https://mongoosejs.com/docs/api/model.html
+ * 此处只实现了常用的db操作.如果需要其他db操作可以通过model.[funcName]来调用.具体funcName参考上面的文档
+ */
 export class MongodbOperation<T> implements IMongodbOperation<T> {
 
     _schema;

@@ -1,6 +1,6 @@
 import {isObject} from 'util';
 import {FreelogApplication} from './index';
-import * as koaValidateExtend from './lib/koa-validate-extend';
+import koaValidateExtend from './lib/koa-validate-extend';
 import {loaderCustomDirAndFile} from './lib/loader-custom-dir-and-file';
 import mongoose from './database/mongoose'
 import {IBoot} from 'egg';
@@ -17,7 +17,7 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
     }
 
     configWillLoad() {
-        
+
     }
 
     async willReady() {

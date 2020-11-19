@@ -1,7 +1,7 @@
-import {ArgumentError, CommonRegex} from '../index';
+import {ArgumentError, CommonRegex, IKoaValidate} from '../index';
 import {isArray, isFunction, isObject, isString} from 'util';
 
-module.exports = {
+export default {
 
     /**
      * 此处修改覆盖源代码上的BUG.
@@ -9,7 +9,7 @@ module.exports = {
      * @param data
      * @returns {exports}
      */
-    default(data) {
+    default(this: IKoaValidate, data: any) {
         if (!this.hasError() && this.value === undefined) {
             this.value = this.params[this.key] = data;
         }
@@ -21,7 +21,7 @@ module.exports = {
      * @param tip
      * @returns {module.exports}
      */
-    isSha1(tip) {
+    isSha1(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.sha1.test(this.value)) {
             this.addError(tip || this.key + ' is not sha1 format.');
         }
@@ -31,7 +31,7 @@ module.exports = {
     /**
      * 是否是freelog定义的资源ID格式
      */
-    isResourceId(tip) {
+    isResourceId(this: IKoaValidate, tip?: string) {
         return this.isMongoObjectId(tip || this.key + ' is not resourceId format.');
     },
 
@@ -41,7 +41,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isFullResourceName(tip) {
+    isFullResourceName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.fullResourceName.test(this.value)) {
             this.addError(tip || this.key + ' is not fullResourceName format.');
         }
@@ -54,7 +54,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isResourceType(tip) {
+    isResourceType(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.resourceType.test(this.value)) {
             this.addError(tip || this.key + ' is not resourceType format.');
         }
@@ -66,7 +66,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isResourceName(tip) {
+    isResourceName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.commonNameFormat.test(this.value)) {
             this.addError(tip || this.key + ' is not resourceName format.');
         }
@@ -77,7 +77,7 @@ module.exports = {
      * 是否是逗号分隔的resourceId
      * @param tip
      */
-    isSplitResourceId(tip) {
+    isSplitResourceId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitMongoObjectId.test(this.value)) {
             this.addError(tip || this.key + ' is not split resourceId format.');
         }
@@ -88,7 +88,7 @@ module.exports = {
      * 是否是mongoDB-ObjectId
      * @param tip
      */
-    isMongoObjectId(tip) {
+    isMongoObjectId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.mongoObjectId.test(this.value)) {
             this.addError(tip || this.key + ' is error format.');
         }
@@ -100,7 +100,7 @@ module.exports = {
      * @param tip
      * @returns {*}
      */
-    isContractId(tip) {
+    isContractId(this: IKoaValidate, tip?: string) {
         return this.isMongoObjectId(tip || this.key + ' is not contractId format.');
     },
 
@@ -109,7 +109,7 @@ module.exports = {
      * @param tip
      * @returns {*}
      */
-    isPresentableId(tip) {
+    isPresentableId(this: IKoaValidate, tip?: string) {
         return this.isMongoObjectId(tip || this.key + ' is not presentableId format.');
     },
 
@@ -119,7 +119,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isPresentableName(tip) {
+    isPresentableName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.commonNameFormat.test(this.value)) {
             this.addError(tip || this.key + ' is not presentableName format.');
         }
@@ -131,7 +131,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isUsername(tip) {
+    isUsername(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.username.test(this.value)) {
             this.addError(tip || this.key + ' is not username format.');
         }
@@ -141,7 +141,7 @@ module.exports = {
     /**
      * 是否是登录密码
      */
-    isLoginPassword(tip) {
+    isLoginPassword(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.password.test(this.value)) {
             this.addError(tip || this.key + ' is not password format.');
         }
@@ -152,7 +152,7 @@ module.exports = {
      * 是否是事件ID
      * @param tip
      */
-    isEventId(tip) {
+    isContractEventId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.bit32Hex.test(this.value)) {
             this.addError(tip || this.key + ' is not eventId format.');
         }
@@ -164,7 +164,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isBucketName(tip) {
+    isBucketName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.bucketName.test(this.value)) {
             this.addError(tip || this.key + ' is not bucket name format.');
         }
@@ -176,7 +176,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isStrictBucketName(tip) {
+    isStrictBucketName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.strictBucketName.test(this.value)) {
             this.addError(tip || this.key + ' is not bucket name format.');
         }
@@ -188,7 +188,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isSplitMongoObjectId(tip) {
+    isSplitMongoObjectId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitMongoObjectId.test(this.value)) {
             this.addError(tip || this.key + ' is not split id format.');
         }
@@ -200,7 +200,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isSplitMd5(tip) {
+    isSplitMd5(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitMd5.test(this.value)) {
             this.addError(tip || this.key + ' is not split id format.');
         }
@@ -212,7 +212,7 @@ module.exports = {
      * @param tip
      * @returns {module.exports}
      */
-    isSplitSha1(tip) {
+    isSplitSha1(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitSha1.test(this.value)) {
             this.addError(tip || this.key + ' is not split id format.');
         }
@@ -224,7 +224,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isSplitNumber(tip) {
+    isSplitNumber(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitNumber.test(this.value)) {
             this.addError(tip || this.key + ' is not split number format.');
         }
@@ -236,7 +236,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isNodeDomain(tip) {
+    isNodeDomain(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.nodeDomain.test(this.value)) {
             this.addError(tip || this.key + ' is error format.');
         }
@@ -248,7 +248,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isNodeName(tip) {
+    isNodeName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.nodeName.test(this.value)) {
             this.addError(tip || this.key + ' is error format.');
         }
@@ -260,7 +260,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isTransferAccountId(tip) {
+    isTransferAccountId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.transferAccountId.test(this.value)) {
             this.addError(tip || this.key + ' is not account format.');
         }
@@ -273,7 +273,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isMd5(tip) {
+    isMd5(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.md5.test(this.value)) {
             this.addError(tip || this.key + ' is not md5.');
         }
@@ -284,7 +284,7 @@ module.exports = {
      * 是否数组
      * @param tip
      */
-    isArray(tip) {
+    isArray(this: IKoaValidate, tip?: string) {
         if (this.goOn && !isArray(this.value)) {
             this.addError(tip || this.key + ' is not array.');
         }
@@ -295,7 +295,7 @@ module.exports = {
      * 是否对象
      * @param tip
      */
-    isObject(tip) {
+    isObject(this: IKoaValidate, tip?: string) {
         if (this.goOn && !isObject(this.value)) {
             this.addError(tip || this.key + ' is not object.');
         }
@@ -307,7 +307,7 @@ module.exports = {
      * @param tip
      * @param split
      */
-    toSplitArray(tip, split = ',') {
+    toSplitArray(this: IKoaValidate, tip?: string, split = ',') {
         if (this.goOn && !this.hasError()) {
             if (!isString(this.value)) {
                 this.addError(tip || this.key + ' is not string.');
@@ -323,7 +323,7 @@ module.exports = {
      * @param checkFunc
      * @param tip
      */
-    is(checkFunc, tip) {
+    is(this: IKoaValidate, checkFunc: any, tip?: string) {
 
         if (!isFunction(checkFunc)) {
             throw new ArgumentError('first argument must be function')
@@ -337,7 +337,7 @@ module.exports = {
     /**
      * 转换范围版本
      */
-    toVersionRange(tip) {
+    toVersionRange(this: IKoaValidate, tip?: string) {
         this.isVersionRange(tip)
         if (this.goOn && !this.hasError()) {
             this.value = this.params[this.key] = require('semver').validRange(this.value)
@@ -350,7 +350,7 @@ module.exports = {
      * @param tip
      * @returns {exports}
      */
-    isVersionRange(tip) {
+    isVersionRange(this: IKoaValidate, tip?: string) {
         let semver = require('semver')
         if (this.goOn && semver.validRange(this.value) === null) {
             this.addError(tip || this.key + ' is not semver range version.');
