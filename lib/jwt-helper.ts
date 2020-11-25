@@ -28,7 +28,6 @@ export class JwtHelper {
         }
         const header = {alg: "RSA-SHA256", typ: "JWT"};
 
-
         const headerBase64Str = CryptoHelper.base64Encode(JSON.stringify(header));
         const payloadBase64Str = CryptoHelper.base64Encode(JSON.stringify(payload));
         const signature = CryptoHelper.rsaSha256Sign(`${headerBase64Str}.${payloadBase64Str}`, this.privateKey ?? '');

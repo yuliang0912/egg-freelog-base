@@ -49,6 +49,7 @@ export interface FreelogContext extends Context {
      * 用户ID
      */
     userId: number;
+
     /**
      * 请求接口的客户端ID,由gateway分配
      */
@@ -298,14 +299,14 @@ export interface ISubjectAuthResult {
 export interface PageResult<T> {
 
     /**
-     * 当前页码(1开始)
+     * 数据查询起点条数,类似于(page-1)*pageSize
      */
-    page: number;
+    skip: number;
 
     /**
-     * 每页数量
+     * 获取的数据数量,类似于pageSize
      */
-    pageSize: number;
+    limit: number;
 
     /**
      * 总数量
@@ -322,6 +323,13 @@ export interface PageResult<T> {
  * 自己拓展的校验函数
  */
 export interface IKoaValidateExtend {
+
+    /**
+     * 是否忽略此参数.如果选择忽略参数.不管参数存不存在都不在校验和取值.就当不存在,取值为undefined
+     * @param isIgnore 是否忽略此参数
+     * @param tip isIgnore = false时的校验错误提示
+     */
+    isIgnore(this: IKoaValidate, isIgnore: boolean, tip?: string): IKoaValidate;
 
     /**
      * check if the param is a sha1 value.
@@ -498,6 +506,12 @@ export interface IKoaValidateExtend {
      * @param tip
      */
     isVersionRange(tip?: string): IKoaValidate;
+
+    /**
+     * 字符串转换为排序对象,例如input "createDate:-1" => output {createDate:-1}
+     * @param tip
+     */
+    toSortObject(this: IKoaValidate, tip?: string): IKoaValidate;
 }
 
 /**

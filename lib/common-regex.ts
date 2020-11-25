@@ -109,4 +109,9 @@ export default {
      * 通用名称命名规则,(资源,mock,presentable统一)名称(不能包含\ / : * ? " < > |字符以及空格,长度1-60)
      */
     commonNameFormat: /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/,
+
+    /**
+     * 排序格式, 正序 fieldName:1 或者 倒序 fieldName:-1
+     */
+    pageSortString: /[a-zA-Z0-9_]{1,20}:(1|-1)/
 }

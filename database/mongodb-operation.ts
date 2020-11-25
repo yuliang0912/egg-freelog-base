@@ -1,5 +1,4 @@
-import {isNumber} from 'util';
-import {DatabaseConnectionError, IMongodbOperation} from '../index';
+import {DatabaseConnectionError, IMongodbOperation, PageResult} from '../index';
 
 /**
  * 实现了接口IMongodbOperation=>IDataBaseOperation.针对所有的DB操作进行了统一API的封装.
@@ -37,97 +36,115 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
     }
 
     /**
-     * 创建实体
+     * 创建model
      * @param model
+     * @param args
      */
-    async create(model, ...args): Promise<T> {
+    create(model: object, ...args): Promise<T> {
         return this.model.create(model, ...args);
     }
 
-
     /**
-     * 查找并更新
-     * @param args
-     * @returns {*}
-     */
-    async findOneAndUpdate(condition, ...args): Promise<T> {
-        return this.model.findOneAndUpdate(condition, ...args);
-    }
-
-
-    /**
-     * 批量新增
+     * 插入多条数据
      * @param models
+     * @param args
      */
-    async insertMany(models: object[], ...args): Promise<T[]> {
+    insertMany(models: object[], ...args): Promise<T[]> {
         return this.model.insertMany(models, ...args);
     }
 
     /**
-     * 查询数量
+     * 统计数量
      * @param condition
      */
-    async count(condition: object): Promise<number> {
+    count(condition: object): Promise<number> {
         return this.model.countDocuments(condition).exec();
     }
 
     /**
-     * 获取单个实体
+     * 查找一条数据
      * @param condition
-     * @returns {*}
+     * @param args
      */
-    async findOne(condition: object, ...args): Promise<T> {
+    findOne(condition: object, ...args): Promise<T> {
         return this.model.findOne(condition, ...args).exec();
     }
 
     /**
-     * 根据ID查找
-     * @param condition
+     * 根据ID查询
+     * @param id
      * @param args
-     * @returns {*}
      */
-    async findById(condition: object, ...args): Promise<T> {
-        return this.model.findById(condition, ...args).exec();
+    findById(id: any, ...args): Promise<T> {
+        return this.model.findById(id, ...args).exec();
     }
 
     /**
-     * 获取列表
+     * 根据条件查询多条
      * @param condition
-     * @returns {*}
+     * @param args
      */
-    async find(condition: object, ...args): Promise<T[]> {
+    find(condition: object, ...args): Promise<T[]> {
         return this.model.find(condition, ...args).exec();
     }
 
     /**
-     * 获取分页列表
+     * [已过时]查询分页列表
      * @param condition
      * @param page
      * @param pageSize
      * @param projection
+     * @param sort
      */
-    async findPageList(condition: number, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
-        const options: any = {sort};
-        if (isNumber(page) && isNumber(pageSize)) {
-            if (page < 1 || pageSize < 1) {
-                return Promise.reject(new Error("参数page和pageSize必须大于0"))
-            }
-            options.skip = (page - 1) * pageSize
-            options.limit = pageSize
-        } else if (isNumber(pageSize)) {
-            options.limit = pageSize
-        }
-        return this.model.find(condition, projection, options).exec();
+    findPageList(condition: number, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
+        page = page ?? 1;
+        pageSize = pageSize ?? 10;
+        return this.model.find(condition, projection, {
+            limit: (page - 1) * pageSize, skip: pageSize, sort: sort ?? {_id: 1},
+        });
     }
+
+    /**
+     * 查询区间列表,返回分页数据,用于替代findPageList
+     * @param condition
+     * @param skip
+     * @param limit
+     * @param projection
+     * @param sort
+     */
+    async findIntervalList(condition: object, skip?: number, limit?: number, projection?: string, sort?: object): Promise<PageResult<T>> {
+        let dataList = [];
+        skip = skip ?? 0;
+        limit = limit ?? 10;
+        const totalItem = await this.count(condition);
+        if (totalItem > skip) {
+            let options: any = {skip, limit};
+            if (sort) {
+                options.sort = sort;
+            }
+            dataList = await this.model.find(condition, projection, options);
+        }
+        return {skip, limit, totalItem, dataList};
+    }
+
+    /**
+     * 查找单条数据
+     * @param condition
+     * @param model
+     * @param args
+     */
+    findOneAndUpdate(condition: object, model: object, ...args): Promise<T> {
+        return this.model.findOneAndUpdate(condition, model, ...args);
+    }
+
 
     /**
      * 更新一条数据
      * @param condition
      * @param model
      * @param args
-     * @returns {*}
      */
-    async updateOne(condition: object, model: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
+    updateOne(condition: object, model: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
         return this.model.updateOne(condition, model, ...args).exec();
     }
 
@@ -136,27 +153,26 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
      * @param condition
      * @param model
      * @param args
-     * @returns {*}
      */
-    async updateMany(condition: object, model: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
+    updateMany(condition: object, model: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
         return this.model.updateMany(condition, model, ...args).exec();
     }
 
     /**
-     * 删除单条数据
+     * 删除一条数据
      * @param condition
-     * @returns {Promise<never>}
+     * @param args
      */
-    async deleteOne(condition: object): Promise<{ n: number, nModified: number, ok: number }> {
-        return this.model.deleteOne(condition).exec();
+    deleteOne(condition: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
+        return this.model.deleteOne(condition, ...args).exec();
     }
 
     /**
-     * 删除多条
+     * 删除多条数据
      * @param condition
-     * @returns {*}
+     * @param args
      */
-    async deleteMany(condition: object): Promise<{ n: number, nModified: number, ok: number }> {
-        return this.model.deleteMany(condition).exec();
+    deleteMany(condition: object, ...args): Promise<{ n: number, nModified: number, ok: number }> {
+        return this.model.deleteMany(condition, ...args).exec();
     }
 }

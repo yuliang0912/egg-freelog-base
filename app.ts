@@ -7,7 +7,6 @@ import {IBoot} from 'egg';
 
 const koaValidate = require('koa-validate')
 
-
 export default class FreelogBaseFrameworkAppBootHook implements IBoot {
 
     app: FreelogApplication;
@@ -25,6 +24,16 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
         this.loaderCustomDirAndFileHandle();
         this.uncaughtExceptionOrRejectionHandle();
         await this.connectMongodb();
+        await this.connectRabbit();
+    }
+
+    async connectRabbit() {
+        const config = this.app.config.rabbitMq
+        if (!config || config.enable === false) {
+            return;
+        }
+        const rabbitClient = require('./message-queue/rabbit');
+        await rabbitClient(this.app);
     }
 
     /**
@@ -62,11 +71,11 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
     uncaughtExceptionOrRejectionHandle() {
         // @ts-ignore
         process.on('unhandledRejection', err => {
-            console.log("process-on-unhandledRejection,[detail]:" + err.stack || err.toString());
+            console.log("process-on-unhandledRejection,[detail]:" + err.toString());
         });
         // @ts-ignore
         process.on('uncaughtException', err => {
-            console.log("process-on-uncaughtException,[detail]:" + err.stack || err.toString());
+            console.log("process-on-uncaughtException,[detail]:" + err.toString());
         });
     }
 }

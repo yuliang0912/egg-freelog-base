@@ -17,6 +17,19 @@ export default {
     },
 
     /**
+     * 是否忽略此参数.如果选择忽略参数.不管参数存不存在都不在校验和取值.就当不存在,取值为undefined
+     * @param isIgnore
+     */
+    isIgnore(this: IKoaValidate, isIgnore: boolean, tip?: string) {
+        if (isIgnore) {
+            this.goOn = false;
+            this.value = undefined;
+            return this;
+        }
+        return this.exist(tip);
+    },
+
+    /**
      * 是否是sha1格式
      * @param tip
      * @returns {module.exports}
@@ -341,6 +354,22 @@ export default {
         this.isVersionRange(tip)
         if (this.goOn && !this.hasError()) {
             this.value = this.params[this.key] = require('semver').validRange(this.value)
+        }
+        return this;
+    },
+
+    /**
+     * 字符串转换为排序对象,例如input "createDate:-1" => output {createDate:-1}
+     * @param tip
+     */
+    toSortObject(this: IKoaValidate, tip?: string) {
+        if (this.goOn && !this.hasError()) {
+            if (!CommonRegex.pageSortString.test(this.value)) {
+                this.addError(tip || this.key + ' is not sort format string.');
+            } else {
+                const [field, sortType] = this.value.split(':');
+                this.value = this.params[this.key] = {[field]: parseInt(sortType)};
+            }
         }
         return this;
     },

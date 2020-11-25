@@ -1,7 +1,7 @@
 import {isUndefined, isError} from 'util';
 import {buildApiFormatData, jsonStringify} from '../../lib/freelog-common-func'
 import {
-    FreelogContext, ErrCodeEnum, RetCodeEnum, ApplicationErrorBase,
+    FreelogContext, ErrCodeEnum, RetCodeEnum,
     ApplicationRouterMatchError, ArgumentError, FreelogApplication
 } from '../../index'
 
@@ -21,13 +21,17 @@ async function errorAutoSnapAndHandle(ctx: FreelogContext, next: () => Promise<a
 
     await next();
 
-    if (isUndefined(ctx.body) && ctx.status === 404) {
+    if (ctx.status === 404 && isUndefined(ctx.body) && ctx.request.url === '/') {
+        ctx.body = `this is service : ${ctx.app.config.name}`;
+        return;
+    }
+    if (ctx.status === 404 && isUndefined(ctx.body)) {
         throw new ApplicationRouterMatchError('路由不匹配,请检查url地址')
     }
-
     // 未设置body时,自动转换响应结果为null
-    if (isUndefined(ctx.body) && /^(2|3)\d{2}$/.test(ctx.status.toString())) {
+    if (isUndefined(ctx.body) && /^[23]\d{2}$/.test(ctx.status.toString())) {
         ctx.body = buildApiFormatData(RetCodeEnum.success, ErrCodeEnum.success, 'success', null);
+        return;
     }
 }
 
@@ -37,20 +41,15 @@ export default function errorAutoSnapHandleMiddleware(_options: object | null, a
         try {
             await errorAutoSnapAndHandle(ctx, next);
         } catch (e) {
-            if (isError(e) && !(e instanceof ApplicationErrorBase)) {
-                Object.assign(e, {
-                    retCode: RetCodeEnum.success,
-                    errCode: ErrCodeEnum.autoSnapError
-                })
-            }
+            e.retCode = e.retCode ?? RetCodeEnum.success;
+            e.errCode = e.errCode ?? ErrCodeEnum.autoSnapError;
+            const responseBody = buildApiFormatData(e.retCode, e.errCode, e.message ?? e.toString(), e.data);
             if (app.config.env === 'local' || app.config.env === 'test') {
-                ctx.body = buildApiFormatData(e.retCode, e.errCode, e.stack || e.message || e.toString(), e.data)
-            } else {
-                ctx.body = buildApiFormatData(e.retCode, e.errCode, e.message || e.toString(), e.data)
+                responseBody.msg = e.stack ?? e.message ?? e.toString();
             }
-            ctx.body = jsonStringify(ctx.body);
+            // 此前调用系统默认的JSON.Stringify偶尔会出错,改进用优化版本的.
+            ctx.body = jsonStringify(responseBody);
             ctx.set('content-type', 'application/json; charset=utf-8');
         }
     };
-
 }
