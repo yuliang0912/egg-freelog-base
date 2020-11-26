@@ -19,6 +19,7 @@ export default {
     /**
      * 是否忽略此参数.如果选择忽略参数.不管参数存不存在都不在校验和取值.就当不存在,取值为undefined
      * @param isIgnore
+     * @param tip
      */
     isIgnore(this: IKoaValidate, isIgnore: boolean, tip?: string) {
         if (isIgnore) {
@@ -383,6 +384,19 @@ export default {
         let semver = require('semver')
         if (this.goOn && semver.validRange(this.value) === null) {
             this.addError(tip || this.key + ' is not semver range version.');
+        }
+        return this;
+    },
+
+    /**
+     * 是否是指定范围内的数字
+     * @param min
+     * @param max
+     * @param tip
+     */
+    isRangeNumber(this: IKoaValidate, min: number, max: number, tip?: string) {
+        if (this.goOn && (this.value < min || this.value > max)) {
+            this.addError(tip || this.key + ' is not range number.');
         }
         return this;
     }

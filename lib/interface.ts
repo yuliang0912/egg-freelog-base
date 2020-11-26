@@ -512,6 +512,13 @@ export interface IKoaValidateExtend {
      * @param tip
      */
     toSortObject(this: IKoaValidate, tip?: string): IKoaValidate;
+
+    /**
+     * 是否是指定范围内的数字
+     * @param min
+     * @param max
+     */
+    isRangeNumber(this: IKoaValidate, min: number, max: number): IKoaValidate;
 }
 
 /**
