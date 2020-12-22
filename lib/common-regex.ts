@@ -78,7 +78,7 @@ export default {
     /**
      * bucketName规则:只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾.
      */
-    bucketName: /^((?!-)[a-z0-9-]{1,63}(?<!-)$)|(.UserNodeData)/,  ///^(?!-)[\.]?[a-z0-9-]{1,63}(?<!-)$/,
+    bucketName: /^((?!-)[a-z0-9-]{1,63}(?<!-)$)|(.UserNodeData)/, /// ^(?!-)[\.]?[a-z0-9-]{1,63}(?<!-)$/,
 
     /**
      * 严格模式的bucketName,只允许小写字母、数字、中划线（-），且不能以短横线开头或结尾
@@ -113,5 +113,15 @@ export default {
     /**
      * 排序格式, 正序 fieldName:1 或者 倒序 fieldName:-1
      */
-    pageSortString: /[a-zA-Z0-9_]{1,20}:(1|-1)/
-}
+    pageSortString: /[a-zA-Z0-9_]{1,20}:(1|-1)/,
+
+    /**
+     * freelog 用户ID
+     */
+    userId: /^[0-9]{5,12}$/,
+
+    /**
+     * 逗号分隔的用户ID
+     */
+    splitUserIds: /^[0-9]{5,12}(,[0-9]{5,12})*$/,
+};

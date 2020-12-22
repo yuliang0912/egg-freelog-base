@@ -1,10 +1,10 @@
-import {Stream} from "stream";
+import {Stream} from 'stream';
 import {Context, Application} from 'egg';
-import {ValidatorResult} from "jsonschema";
+import {ValidatorResult} from 'jsonschema';
 import {
     ErrCodeEnum, RetCodeEnum, SubjectAuthCodeEnum, SubjectTypeEnum,
-    ApplicationErrorBase, CurlResFormatEnum
-} from "../index";
+    ApplicationErrorBase, CurlResFormatEnum,
+} from '../index';
 
 /**
  *  freelog-api通用返回格式
@@ -20,6 +20,7 @@ export interface FreelogUserInfo {
     [key: string]: any;
 
     userId: number;
+
     username: string;
 }
 
@@ -96,6 +97,32 @@ export interface FreelogContext extends Context {
      * 校验参数是否包含错误.主要通过ctx.errors判定.如果有错误,直接抛出异常
      */
     validateParams(): FreelogContext;
+
+    /**
+     * 是否登陆用户
+     */
+    isLoginUser(): boolean;
+
+    /**
+     * 是否内部客户端请求
+     */
+    isInternalClient(): boolean;
+
+    /**
+     * 是否是官方后台审核账号
+     */
+    isOfficialAuditAccount(this: FreelogContext);
+
+    /**
+     * 是否是官方后台管理账户
+     */
+    validateOfficialAuditAccount(): FreelogContext;
+
+    /**
+     * 验证访客身份
+     * @param identityType
+     */
+    validateVisitorIdentity(identityType?: number): FreelogContext;
 
     /**
      * 实体空值校验
@@ -398,6 +425,18 @@ export interface IKoaValidateExtend {
     isUsername(tip?: string): IKoaValidate;
 
     /**
+     *  check if the param is a freelog userId
+     * @param tip
+     */
+    isUserId(tip?: string): IKoaValidate;
+
+    /**
+     *  check if the param is a split userId
+     * @param tip
+     */
+    isSplitUserIds(tip?: string): IKoaValidate;
+
+    /**
      *  check if the param is a freelog login password
      * @param tip
      */
@@ -519,6 +558,17 @@ export interface IKoaValidateExtend {
      * @param max
      */
     isRangeNumber(this: IKoaValidate, min: number, max: number): IKoaValidate;
+
+    /**
+     * 空字符串视作虚无
+     */
+    emptyStringAsNothingness(this: IKoaValidate): IKoaValidate;
+
+    /**
+     * 当参数值满足一定条件,则忽略此参数,阻止链式调用,且值该为undefined,可以代替optional
+     * @param ignoreValues 默认为["", null, undefined]
+     */
+    ignoreParamWhenEmpty(this: IKoaValidate, ignoreValues?: any[])
 }
 
 /**
@@ -1144,5 +1194,4 @@ export interface IKoaValidate extends IKoaValidateExtend {
      */
     delete(): IKoaValidate;
 }
-
 

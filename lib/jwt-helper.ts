@@ -20,13 +20,13 @@ export class JwtHelper {
         if (!isObject(payload)) {
             throw new ArgumentError('payload must be object');
         }
-        if (isString(this.privateKey)) {
+        if (!isString(this.privateKey)) {
             throw new ArgumentError('private Key can not empty');
         }
         if (!Reflect.has(payload, 'exp')) {
-            Reflect.set(payload, 'exp', this.getExpire(expire ?? 1296000)) // 默认14天过期
+            Reflect.set(payload, 'exp', this.getExpire(expire ?? 1296000)); // 默认14天过期
         }
-        const header = {alg: "RSA-SHA256", typ: "JWT"};
+        const header = {alg: 'RSA-SHA256', typ: 'JWT'};
 
         const headerBase64Str = CryptoHelper.base64Encode(JSON.stringify(header));
         const payloadBase64Str = CryptoHelper.base64Encode(JSON.stringify(payload));
@@ -57,7 +57,7 @@ export class JwtHelper {
         if (!isString(this.publicKey)) {
             error = 'public Key can not empty';
         } else {
-            isVerify = CryptoHelper.rsaSha256Verify(`${header}.${payload}`, signature, this.publicKey)
+            isVerify = CryptoHelper.rsaSha256Verify(`${header}.${payload}`, signature, this.publicKey);
         }
 
         if (!isVerify) {

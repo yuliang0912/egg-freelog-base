@@ -1,4 +1,4 @@
-import {PageResult} from "../lib/interface";
+import {PageResult} from '..';
 
 export interface IDataBaseOperation {
 

@@ -3,12 +3,12 @@ import {
     ErrCodeEnum,
     RetCodeEnum,
     ApiInvokingError,
-    IApiDataFormat
+    IApiDataFormat,
 } from '../index';
 
 export function buildApiFormatData(ret: RetCodeEnum, errCode: ErrCodeEnum, msg: string, data: any): IApiDataFormat {
     return {
-        ret, errCode, errcode: errCode, msg, data: isNullOrUndefined(data) ? null : data
+        ret, errCode, errcode: errCode, msg, data: isNullOrUndefined(data) ? null : data,
     } as IApiDataFormat; // 先兼容旧版的errcode.后期会删除
 }
 
@@ -52,7 +52,7 @@ export function jsonStringify(obj: object): string {
                 try {
                     return JSON.parse(JSON.stringify(value));
                 } catch (error) {
-                    return
+                    return;
                 }
             }
             // @ts-ignore
@@ -62,5 +62,5 @@ export function jsonStringify(obj: object): string {
     });
     // @ts-ignore
     cache = null;
-    return str
+    return str;
 }

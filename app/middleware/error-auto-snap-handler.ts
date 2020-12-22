@@ -1,9 +1,9 @@
 import {isUndefined, isError} from 'util';
-import {buildApiFormatData, jsonStringify} from '../../lib/freelog-common-func'
+import {buildApiFormatData, jsonStringify} from '../../lib/freelog-common-func';
 import {
     FreelogContext, ErrCodeEnum, RetCodeEnum,
-    ApplicationRouterMatchError, ArgumentError, FreelogApplication
-} from '../../index'
+    ApplicationRouterMatchError, ArgumentError, FreelogApplication, BreakOffError
+} from "../../index";
 
 async function errorAutoSnapAndHandle(ctx: FreelogContext, next: () => Promise<any>): Promise<void> {
 
@@ -26,7 +26,7 @@ async function errorAutoSnapAndHandle(ctx: FreelogContext, next: () => Promise<a
         return;
     }
     if (ctx.status === 404 && isUndefined(ctx.body)) {
-        throw new ApplicationRouterMatchError('路由不匹配,请检查url地址')
+        throw new ApplicationRouterMatchError('路由不匹配,请检查url地址');
     }
     // 未设置body时,自动转换响应结果为null
     if (isUndefined(ctx.body) && /^[23]\d{2}$/.test(ctx.status.toString())) {
@@ -41,6 +41,9 @@ export default function errorAutoSnapHandleMiddleware(_options: object | null, a
         try {
             await errorAutoSnapAndHandle(ctx, next);
         } catch (e) {
+            if (e instanceof BreakOffError) {
+                return;
+            }
             e.retCode = e.retCode ?? RetCodeEnum.success;
             e.errCode = e.errCode ?? ErrCodeEnum.autoSnapError;
             const responseBody = buildApiFormatData(e.retCode, e.errCode, e.message ?? e.toString(), e.data);

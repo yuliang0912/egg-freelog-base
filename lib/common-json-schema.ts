@@ -1,20 +1,18 @@
-'use strict'
-
 import {Validator} from 'jsonschema';
 import {ArgumentError, CommonRegex} from '../index';
 
-import {isRegExp, isString, isFunction} from 'util'
+import {isRegExp, isString, isFunction} from 'util';
 
 export class CommonJsonSchema extends Validator {
 
     constructor() {
-        super()
-        this.__initialCustomFormats__()
+        super();
+        this.__initialCustomFormats__();
     }
 
     /**
      * 注册freelog默认的自定义格式
-     * @returns {*}
+     * @return {*}
      * @private
      */
     __initialCustomFormats__() {
@@ -33,14 +31,13 @@ export class CommonJsonSchema extends Validator {
     registerCustomFormats(formatName: string, fn: (input: string) => boolean) {
 
         if (!isString(formatName)) {
-            throw new ArgumentError("args[0] must be string")
+            throw new ArgumentError('args[0] must be string');
         }
         if (!isFunction(fn)) {
-            throw new ArgumentError("args[1] must be function")
+            throw new ArgumentError('args[1] must be function');
         }
 
-        this.customFormats[formatName] = fn
+        this.customFormats[formatName] = fn;
     }
 }
-
 

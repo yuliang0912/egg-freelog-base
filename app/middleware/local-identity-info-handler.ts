@@ -17,7 +17,8 @@ export default function localIdentityInfoMiddleware(_options: object | null, app
 
         ctx.identityInfo.userInfo = {
             userId: localIdentityInfo?.userId ?? 0,
-            username: localIdentityInfo?.username ?? ''
+            username: localIdentityInfo?.username ?? '',
+            email: localIdentityInfo?.email ?? ''
         };
         ctx.userId = ctx.identityInfo.userInfo.userId;
 

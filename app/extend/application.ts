@@ -33,4 +33,4 @@ export default {
         this.messenger.sendToAgent(SEND_MSG_TO_CLUSTER_RANDOM_WORKER_EVENT.toString(), {eventName, data});
     },
 
-}
+};

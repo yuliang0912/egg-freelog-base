@@ -1,6 +1,4 @@
-'use strict';
-
-import {dirname} from 'path'
+import {dirname} from 'path';
 
 const egg = require('egg');
 const EGG_PATH = Symbol.for('egg#eggPath');

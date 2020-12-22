@@ -2,10 +2,10 @@ import {isObject} from 'util';
 import {FreelogApplication} from './index';
 import koaValidateExtend from './lib/koa-validate-extend';
 import {loaderCustomDirAndFile} from './lib/loader-custom-dir-and-file';
-import mongoose from './database/mongoose'
+import mongoose from './database/mongoose';
 import {IBoot} from 'egg';
 
-const koaValidate = require('koa-validate')
+const koaValidate = require('koa-validate');
 
 export default class FreelogBaseFrameworkAppBootHook implements IBoot {
 
@@ -28,7 +28,7 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
     }
 
     async connectRabbit() {
-        const config = this.app.config.rabbitMq
+        const config = this.app.config.rabbitMq;
         if (!config || config.enable === false) {
             return;
         }

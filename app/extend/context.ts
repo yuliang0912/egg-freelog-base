@@ -1,5 +1,5 @@
 import {parse} from 'url';
-import {isError, isNullOrUndefined, isObject, isString} from 'util'
+import {isError, isNullOrUndefined, isObject, isString} from 'util';
 import {base64Encode, hmacSha1} from '../../lib/crypto-helper';
 import {buildApiFormatData, convertIntranetApiResponseData} from '../../lib/freelog-common-func';
 import {
@@ -48,7 +48,7 @@ export default {
 
     /**
      * 验证参数
-     * @returns {exports}
+     * @return {exports}
      */
     validateParams(this: FreelogContext): FreelogContext {
 
@@ -77,29 +77,57 @@ export default {
     },
 
     /**
+     * 是否是官方后台审核账号
+     */
+    isOfficialAuditAccount(this: FreelogContext): boolean {
+        if (!this.isLoginUser()) {
+            return false;
+        }
+        return this.identityInfo.userInfo?.email === 'support@freelog.com';
+    },
+
+    /**
+     * 是否官方审核账户
+     */
+    validateOfficialAuditAccount(this: FreelogContext): FreelogContext {
+
+        if (!this.userId) {
+            throw new AuthenticationError(this.gettext('user-authentication-failed'));
+        }
+
+        const {userInfo} = this.identityInfo;
+        if (userInfo?.email !== 'support@freelog.com') {
+            throw new AuthorizationError(this.gettext('user-authorization-failed'));
+        }
+        return this;
+    },
+
+    /**
      * 访客身份认证与授权
      * @param identityType
      */
-    validateVisitorIdentity(this: FreelogContext, identityType: number = 6): FreelogContext {
+    validateVisitorIdentity(this: FreelogContext, identityType = 6): FreelogContext {
 
-        const {InternalClient, LoginUser, UnLoginUser, LoginUserAndInternalClient, UnLoginUserAndInternalClient} = IdentityTypeEnum
+        const {InternalClient, LoginUser, UnLoginUser, LoginUserAndInternalClient, UnLoginUserAndInternalClient} = IdentityTypeEnum;
 
         if ((identityType & InternalClient) === InternalClient && this.isInternalClient()) {
-            return this
+            return this;
         }
         if ((identityType & LoginUser) === LoginUser && this.isLoginUser()) {
-            return this
+            return this;
         }
         if ((identityType & UnLoginUser) === UnLoginUser && !this.isLoginUser()) {
-            return this
+            return this;
         }
         if (identityType === LoginUserAndInternalClient && this.isLoginUser() && this.isInternalClient()) {
-            return this
+            return this;
         }
         if (identityType === UnLoginUserAndInternalClient && !this.isLoginUser() && this.isInternalClient()) {
-            return this
+            return this;
         }
-
+        if (!this.isLoginUser()) {
+            throw new AuthenticationError(this.gettext('user-authentication-failed'));
+        }
         throw new AuthorizationError(this.gettext('user-authorization-failed'));
     },
 
@@ -123,7 +151,7 @@ export default {
     entityNullValueAndUserAuthorizationCheck(this: FreelogContext, entity: object | null, options?: { msg?: string, data?: any, property?: string }): FreelogContext {
 
         if (!this.isLoginUser()) {
-            throw new AuthenticationError(this.gettext('user-authentication-failed'))
+            throw new AuthenticationError(this.gettext('user-authentication-failed'));
         }
 
         this.entityNullObjectCheck(entity, options);
@@ -162,21 +190,25 @@ export default {
 
         const {clientCredentialInfo} = this.app.config;
         if (!clientCredentialInfo) {
-            throw new ArgumentError('未找到clientCredentialInfo配置信息')
+            throw new ArgumentError('未找到clientCredentialInfo配置信息');
         }
 
+        url = this.fixedEncodeURI(url);
         const opt = Object.assign({headers: {}, dataType: 'json'}, options ?? {});
+
+        if (resFormat !== CurlResFormatEnum.FreelogApiData) {
+            delete opt.dataType;
+        }
+
         const timeLine = Math.round(new Date().getTime() / 1000);
         const text = `${parse(url).path}&timeline=${timeLine}`;
-
-        url = this.fixedEncodeURI(url);
 
         opt.headers['clientid'] = clientCredentialInfo.clientId;
         opt.headers['timeline'] = timeLine;
         opt.headers['sign'] = hmacSha1(text, clientCredentialInfo.privateKey);
 
         if (this.get('authorization')) {
-            opt.headers['authorization'] = this.get('authorization')
+            opt.headers['authorization'] = this.get('authorization');
         }
         if (Object.keys(this.identityInfo).length) {
             const token = base64Encode(JSON.stringify(this.identityInfo));
@@ -185,7 +217,7 @@ export default {
         }
         // gateway分配的全局请求追踪ID
         if (isString(this.get('traceId'))) {
-            opt.headers['traceId'] = this.get('traceId')
+            opt.headers['traceId'] = this.get('traceId');
         }
         // i18n设置
         if (isString(this.get('accept-language'))) {
@@ -195,14 +227,17 @@ export default {
         return this.curl(url, opt).then(response => {
             if (resFormat === CurlResFormatEnum.FreelogApiData) {
                 // freelog标准返回格式为 {ret:number,errCode:number,data:any }
-                return convertIntranetApiResponseData(response.data, url, options)
+                return convertIntranetApiResponseData(response.data, url, options);
             } else if (resFormat === CurlResFormatEnum.OriginalData) {
+                // 原始返回,但是只返回data部分
                 return response.data;
-            } else {
+            } else if (resFormat === CurlResFormatEnum.Original) {
                 return response;
+            } else {
+                throw new ApplicationError('不能识别的resFormat');
             }
         }).catch(error => {
             throw new ApiInvokingError(error.message || error.toString(), {url, options});
-        })
-    }
+        });
+    },
 };
