@@ -1,14 +1,13 @@
 import * as crypto from 'crypto';
-import {HexBase64Latin1Encoding} from 'crypto';
+import {BinaryToTextEncoding} from 'crypto';
 
 /**
  * RsaSha256Sign签名
  * @param text 需要签名的文本
- * @param key  签名用的私key
+ * @param privateKey  签名用的私key
  * @param encoding 数据格式
- * @return {string} 签名之后的文本
  */
-export function rsaSha256Sign(text: string, privateKey: string, encoding: HexBase64Latin1Encoding = 'hex'): string {
+export function rsaSha256Sign(text: string, privateKey: string, encoding: BinaryToTextEncoding = 'hex'): string {
     const sign = crypto.createSign('RSA-SHA256');
     sign.update(text);
     return sign.sign(privateKey, encoding);
@@ -20,9 +19,8 @@ export function rsaSha256Sign(text: string, privateKey: string, encoding: HexBas
  * @param sign 签名
  * @param publicKey 公key
  * @param encoding 数据格式
- * @return {bool}
  */
-export function rsaSha256Verify(text: string, sign: string, publicKey: string, encoding: HexBase64Latin1Encoding = 'hex'): boolean {
+export function rsaSha256Verify(text: string, sign: string, publicKey: string, encoding: BinaryToTextEncoding = 'hex'): boolean {
     const verify = crypto.createVerify('RSA-SHA256');
     verify.update(text);
     return verify.verify(publicKey, sign, encoding);
@@ -35,7 +33,7 @@ export function rsaSha256Verify(text: string, sign: string, publicKey: string, e
  * @param encoding 格式
  * @return {string}
  */
-export function sha512(text, encoding: HexBase64Latin1Encoding = 'hex'): string {
+export function sha512(text, encoding: BinaryToTextEncoding = 'hex'): string {
     return crypto.createHash('sha512').update(text).digest(encoding);
 }
 
@@ -45,7 +43,7 @@ export function sha512(text, encoding: HexBase64Latin1Encoding = 'hex'): string 
  * @param key  加密使用的key
  * @param encoding 数据格式
  */
-export function hmacSha1(text, key, encoding: HexBase64Latin1Encoding = 'hex') {
+export function hmacSha1(text, key, encoding: BinaryToTextEncoding = 'hex') {
     return crypto.createHmac('sha1', key).update(text).digest(encoding);
 }
 
@@ -55,7 +53,7 @@ export function hmacSha1(text, key, encoding: HexBase64Latin1Encoding = 'hex') {
  * @param encoding 数据格式
  * @return {string}
  */
-export function md5(text: string, encoding: HexBase64Latin1Encoding = 'hex') {
+export function md5(text: string, encoding: BinaryToTextEncoding = 'hex') {
     return crypto.createHash('md5').update(text).digest(encoding);
 }
 

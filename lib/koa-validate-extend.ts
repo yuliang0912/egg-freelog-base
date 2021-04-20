@@ -1,5 +1,5 @@
 import {ArgumentError, CommonRegex, IKoaValidate} from '../index';
-import {isArray, isFunction, isObject, isString} from 'util';
+import {isFunction, isObject, isString} from 'lodash';
 
 export default {
 
@@ -299,7 +299,7 @@ export default {
      * @param tip
      */
     isArray(this: IKoaValidate, tip?: string) {
-        if (this.goOn && !isArray(this.value)) {
+        if (this.goOn && !Array.isArray(this.value)) {
             this.addError(tip || this.key + ' is not array.');
         }
         return this;

@@ -238,6 +238,16 @@ export interface IRestfulWebApi {
      * 授权信息-V2
      */
     authInfoV2: string;
+
+    /**
+     * 交易信息-V2
+     */
+    transactionInfoV2: string;
+
+    /**
+     * 账户信息-V2
+     */
+    accountInfoV2: string;
 }
 
 /**

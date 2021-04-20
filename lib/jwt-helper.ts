@@ -1,5 +1,5 @@
-import {isObject, isString} from 'util';
 import {ArgumentError, CryptoHelper} from '../index';
+import {isObject, isString} from 'lodash';
 
 export class JwtHelper {
 

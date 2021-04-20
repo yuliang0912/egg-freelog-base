@@ -1,7 +1,8 @@
 import {parse} from 'url';
-import {isError, isNullOrUndefined, isObject, isString} from 'util';
 import {base64Encode, hmacSha1} from '../../lib/crypto-helper';
-import {buildApiFormatData, convertIntranetApiResponseData} from '../../lib/freelog-common-func';
+import {
+    buildApiFormatData, convertIntranetApiResponseData, isNullOrUndefined
+} from '../../lib/freelog-common-func';
 import {
     ApiInvokingError, ApplicationError,
     ApplicationErrorBase,
@@ -15,6 +16,7 @@ import {
     IRestfulWebApi,
     RetCodeEnum,
 } from '../../index';
+import {isError, isObject, isString} from 'lodash';
 
 export default {
 
@@ -185,6 +187,7 @@ export default {
      * 内部curl请求,用户跨服务api调用
      * @param url
      * @param options
+     * @param resFormat
      */
     async curlIntranetApi(this: FreelogContext, url: string, options?: object, resFormat: CurlResFormatEnum = CurlResFormatEnum.FreelogApiData) {
 
@@ -194,10 +197,10 @@ export default {
         }
 
         url = this.fixedEncodeURI(url);
-        const opt = Object.assign({headers: {}, dataType: 'json'}, options ?? {});
+        const opt: any = Object.assign({headers: {}}, options ?? {});
 
-        if (resFormat !== CurlResFormatEnum.FreelogApiData) {
-            delete opt.dataType;
+        if (resFormat === CurlResFormatEnum.FreelogApiData) {
+            opt.dataType = 'json';
         }
 
         const timeLine = Math.round(new Date().getTime() / 1000);
@@ -210,7 +213,7 @@ export default {
         if (this.get('authorization')) {
             opt.headers['authorization'] = this.get('authorization');
         }
-        if (Object.keys(this.identityInfo).length) {
+        if (this.identityInfo && Object.keys(this.identityInfo).length) {
             const token = base64Encode(JSON.stringify(this.identityInfo));
             const sign = hmacSha1(token, clientCredentialInfo.privateKey);
             opt.headers['authentication'] = `${token}:${sign}`;

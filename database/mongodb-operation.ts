@@ -96,7 +96,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
      * @param projection
      * @param sort
      */
-    findPageList(condition: number, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
+    findPageList(condition: object, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
         page = page ?? 1;
         pageSize = pageSize ?? 10;
         return this.model.find(condition, projection, {

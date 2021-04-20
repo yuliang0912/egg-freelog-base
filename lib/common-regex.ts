@@ -63,7 +63,7 @@ export default {
     /**
      * 节点名称(中文,英文,数字)
      */
-    nodeName: /^[\u4E00-\u9FA5|a-zA-Z0-9]{4,20}$/,
+    nodeName: /^[\u4E00-\u9FA5|a-zA-Z0-9]{2,24}$/,
 
     /**
      * 32位小写16进制

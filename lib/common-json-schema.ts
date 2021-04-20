@@ -1,7 +1,6 @@
 import {Validator} from 'jsonschema';
 import {ArgumentError, CommonRegex} from '../index';
-
-import {isRegExp, isString, isFunction} from 'util';
+import {isFunction, isString, isRegExp} from 'lodash';
 
 export class CommonJsonSchema extends Validator {
 

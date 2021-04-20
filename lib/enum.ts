@@ -1,3 +1,6 @@
+/**
+ * 一级错误码
+ */
 export enum RetCodeEnum {
 
     // 服务器维护中
@@ -20,6 +23,9 @@ export enum RetCodeEnum {
 
 }
 
+/**
+ * 二级错误码
+ */
 export enum ErrCodeEnum {
 
     // 正常结果
@@ -68,6 +74,9 @@ export enum ErrCodeEnum {
     apiError = 100,
 }
 
+/**
+ * 认证身份类型
+ */
 export enum IdentityTypeEnum {
 
     /**
@@ -96,6 +105,9 @@ export enum IdentityTypeEnum {
     UnLoginUserAndInternalClient = 16,
 }
 
+/**
+ * 资源类型
+ */
 export enum ResourceTypeEnum {
 
     /**
@@ -161,6 +173,27 @@ export enum SubjectTypeEnum {
 }
 
 /**
+ * 状态色块类型枚举
+ */
+export enum ContractColorStateTypeEnum {
+
+    /**
+     * 正式授权
+     */
+    Authorization = 1,
+
+    /**
+     * 测试授权
+     */
+    TestAuthorization = 2,
+
+    /**
+     * 标签
+     */
+    Label = 3
+}
+
+/**
  * 合同乙方的身份类型
  */
 export enum ContractLicenseeIdentityTypeEnum {
@@ -172,14 +205,17 @@ export enum ContractLicenseeIdentityTypeEnum {
     /**
      * 节点
      */
-    Node,
+    Node = 2,
 
     /**
      * C端消费者
      */
-    ClientUser
+    ClientUser = 3
 }
 
+/**
+ * 合同状态枚举
+ */
 export enum ContractStatusEnum {
     /**
      * 正常生效中
@@ -325,12 +361,24 @@ export enum SubjectAuthCodeEnum {
     AuthDataValidateFailedError = 902
 }
 
+/**
+ * 响应类型
+ */
 export enum CurlResFormatEnum {
 
+    /**
+     * 返回原始响应
+     */
     Original = 1,
 
+    /**
+     * 返回freelogAPI格式的data部分
+     */
     FreelogApiData = 2,
 
+    /**
+     * 返回原始响应的data部分
+     */
     OriginalData = 3
 }
 

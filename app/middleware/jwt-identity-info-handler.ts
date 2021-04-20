@@ -1,5 +1,5 @@
-import {isString} from 'util';
 import {FreelogApplication, FreelogContext, JwtHelper} from '../../index';
+import {isString} from 'lodash';
 
 export default function jwtIdentityInfoHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
@@ -14,7 +14,7 @@ export default function jwtIdentityInfoHandlerMiddleware(_options: object | null
 
         const verifyResult = jwt.verifyToken(jwt_token);
         if (!verifyResult.isVerify) {
-            return await next()
+            return await next();
         }
 
         ctx.userId = verifyResult.payLoad?.userId;

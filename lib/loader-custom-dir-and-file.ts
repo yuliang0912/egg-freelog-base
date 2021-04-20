@@ -1,8 +1,8 @@
 import {join} from 'path';
 import {readdirSync, statSync} from 'fs';
-import {isFunction, isObject} from 'util';
-import {isClass} from './freelog-common-func';
+import {isFunction, isObject} from 'lodash';
 import {FreelogApplication} from '../index';
+import {isClass} from './freelog-common-func';
 
 export function loaderCustomDirAndFile(app: FreelogApplication) {
 
@@ -16,8 +16,8 @@ export function loaderCustomDirAndFile(app: FreelogApplication) {
         let fullPath = '',
             isRecursion = false;
         if (isObject(item)) {
-            isRecursion = item.isRecursion;
-            fullPath = join(baseDir, item.dir);
+            isRecursion = item['isRecursion'];
+            fullPath = join(baseDir, item['dir']);
         } else {
             fullPath = join(baseDir, item);
         }

@@ -166,4 +166,20 @@ export class RestFulWebApis implements IRestfulWebApi {
     get authInfoV2() {
         return `${this.baseUrl}/client/v2/auths`;
     }
+
+    /**
+     * 支付信息
+     * @return {string}
+     */
+    get transactionInfoV2() {
+        return `${this.baseUrl}/client/v2/transactions`;
+    }
+
+    /**
+     * 账户信息
+     * @return {string}
+     */
+    get accountInfoV2() {
+        return `${this.baseUrl}/client/v2/accounts`;
+    }
 }

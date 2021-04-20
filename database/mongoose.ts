@@ -5,20 +5,7 @@ async function createConnection(app: FreelogApplication, mongoose, config) {
     /**
      * wiki:https://mongoosejs.com/docs/api/connection.html
      */
-    const connection = mongoose.createConnection(config.url, config.options)
-
-    // 连接成功
-    connection.on('connected', function () {
-        console.log('Mongoose connection open to ' + config.url);
-    });
-
-    // 连接失败
-    connection.on('error', connectionErrorHandler);
-
-    // 断开连接
-    connection.on('disconnected', function () {
-        console.log('Mongoose connection disconnected');
-    })
+    const connection = mongoose.createConnection(config.url, config.options);
 
     connection.Schema = mongoose.Schema;
 
@@ -31,25 +18,33 @@ async function createConnection(app: FreelogApplication, mongoose, config) {
          3 = disconnecting
          */
         if (connection.readyState === 0) {
-            return createConnection(app, mongoose, config).catch(connectionErrorHandler);
+            return createConnection(app, mongoose, config);
         }
-    }
+    };
 
     connection.getNewObjectId = () => {
         return new mongoose.Types.ObjectId;
-    }
+    };
     connection.convertObjectId = (strId) => {
         return new mongoose.Types.ObjectId(strId);
-    }
+    };
 
     app['mongoose'] = connection;
     app['_mongoose'] = mongoose;
 
-    return connection;
-}
-
-function connectionErrorHandler(error) {
-    console.log('mongodb connection failed, ' + error.toString())
+    return new Promise(function (resolve, reject) {
+        // 连接成功
+        connection.on('connected', function () {
+            console.log('Mongoose connection open to ' + config.url);
+            resolve(connection);
+        }).on('error', function (error) {
+            reject(error);
+            console.log('mongodb connection failed, ' + error.toString());
+        }).on('disconnected', function () {
+            console.log('Mongoose connection disconnected');
+            reject();
+        });
+    });
 }
 
 export default async function (app: FreelogApplication) {
@@ -74,7 +69,5 @@ export default async function (app: FreelogApplication) {
         family: 4 // Use IPv4, skip trying IPv6
     }, config.options ?? {});
 
-    app.beforeStart(async () => {
-        await createConnection(app, mongoose, config).catch(connectionErrorHandler);
-    });
+    return createConnection(app, mongoose, config);
 }
