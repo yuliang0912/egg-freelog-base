@@ -16,9 +16,9 @@ export function convertIntranetApiResponseData(data: any, url: string, options?:
     if (isNullOrUndefined(data)) {
         throw new ApiInvokingError('api response data is null', {url, options});
     }
-    // if (Reflect.has(data, 'errcode') && isNumber(data.errcode)) {
-    //     data.errCode = data.errcode; // 兼容旧版
-    // }
+    if (Reflect.has(data, 'errcode') && isNumber(data.errcode)) {
+        data.errCode = data.errcode; // 兼容旧版
+    }
     if (!isNumber(data?.ret) || !isNumber(data?.errCode)) {
         throw new ApiInvokingError('api response data is error format');
     }

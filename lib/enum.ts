@@ -271,17 +271,17 @@ export enum SubjectAuthCodeEnum {
     BasedOnDefaultAuth = 203,
 
     /**
-     * 合同未获得授权
+     * 合同未获得授权(需要用户继续执行事件)
      */
     SubjectContractUnauthorized = 301,
 
     /**
-     * 策略授权失败
+     * 策略授权失败(一般此错误码用于内部授权校验,对外一般授权展示会转换成标的物未签约错误)
      */
     NullIdentityPolicyUnauthorized = 302,
 
     /**
-     * 标的物合同未找到,可能为数据丢失,或者指定的合同ID错误
+     * 标的物未签约
      */
     SubjectContractNotFound = 303,
 

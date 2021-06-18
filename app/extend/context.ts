@@ -240,7 +240,9 @@ export default {
                 throw new ApplicationError('不能识别的resFormat');
             }
         }).catch(error => {
-            throw new ApiInvokingError(error.message || error.toString(), {url, options});
+            throw new ApiInvokingError(error.message || error.toString(), {
+                url, options, _developmentError: error?._developmentError ?? undefined
+            });
         });
     },
 };

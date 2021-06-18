@@ -52,11 +52,9 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
      * 未处理的错误处理
      */
     uncaughtExceptionOrRejectionHandle() {
-        // @ts-ignore
         process.on('unhandledRejection', (reason: {} | null | undefined) => {
             console.log('process-on-unhandledRejection,[detail]:', reason);
         });
-        // @ts-ignore
         process.on('uncaughtException', err => {
             console.log('process-on-uncaughtException,[detail]:' + err.toString());
         });

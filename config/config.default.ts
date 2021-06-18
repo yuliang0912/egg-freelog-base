@@ -1,5 +1,5 @@
 import {EggAppConfig, EggAppInfo, PowerPartial} from 'egg';
-import {FreelogContext, ErrCodeEnum, RetCodeEnum} from "../index";
+import {FreelogContext, ErrCodeEnum, RetCodeEnum} from '../index';
 import {buildApiFormatData} from '../lib/freelog-common-func';
 
 export interface FreelogFrameworkDefaultConfig {
