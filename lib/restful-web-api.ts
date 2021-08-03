@@ -121,6 +121,13 @@ export class RestFulWebApis implements IRestfulWebApi {
     // =============================================V2====================================================
 
     /**
+     * 用户信息
+     */
+    get userInfoV2() {
+        return `${this.baseUrl}/client/v2/users`;
+    }
+
+    /**
      * 策略信息
      * @return {string}
      */
@@ -181,5 +188,19 @@ export class RestFulWebApis implements IRestfulWebApi {
      */
     get accountInfoV2() {
         return `${this.baseUrl}/client/v2/accounts`;
+    }
+
+    /**
+     * 资源解压
+     */
+    get resourceDecompressionV2() {
+        return `${this.baseUrl}/client/v2/resource-decompressions`;
+    }
+
+    /**
+     * 验证码
+     */
+    get messageV2() {
+        return `${this.baseUrl}/client/v2/messages`;
     }
 }

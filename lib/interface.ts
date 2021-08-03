@@ -210,6 +210,11 @@ export interface IRestfulWebApi {
     storageInfo: string;
 
     /**
+     * 用户信息
+     */
+    userInfoV2: string;
+
+    /**
      * 策略信息-V2
      */
     policyInfoV2: string;
@@ -223,6 +228,11 @@ export interface IRestfulWebApi {
      * 资源信息-v2
      */
     resourceInfoV2: string;
+
+    /**
+     * 资源插件解压
+     */
+    resourceDecompressionV2: string;
 
     /**
      *  展品信息-v2
@@ -248,6 +258,11 @@ export interface IRestfulWebApi {
      * 账户信息-V2
      */
     accountInfoV2: string;
+
+    /**
+     * 验证码
+     */
+    messageV2: string;
 }
 
 /**
