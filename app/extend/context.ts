@@ -1,4 +1,4 @@
-import {parse} from 'url';
+import {URL} from 'url';
 import {base64Encode, hmacSha1} from '../../lib/crypto-helper';
 import {
     buildApiFormatData, convertIntranetApiResponseData, isNullOrUndefined
@@ -37,7 +37,7 @@ export default {
 
         const isErrorParam = isError(errorInfo);
         if ((this.app.config.env === 'test' || this.app.config.env === 'local') && isErrorParam) {
-            console.error(errorInfo);
+            this.logger.info(errorInfo);
         }
         if (isErrorParam && errorInfo instanceof ApplicationErrorBase) {
             throw errorInfo;
@@ -204,7 +204,9 @@ export default {
         }
 
         const timeLine = Math.round(new Date().getTime() / 1000);
-        const text = `${parse(url).path}&timeline=${timeLine}`;
+
+        const {pathname, search} = new URL(url);
+        const text = `${pathname + search}&timeline=${timeLine}`;
 
         opt.headers['clientid'] = clientCredentialInfo.clientId;
         opt.headers['timeline'] = timeLine;
@@ -240,6 +242,9 @@ export default {
                 throw new ApplicationError('不能识别的resFormat');
             }
         }).catch(error => {
+            if (error instanceof ApiInvokingError) {
+                throw error;
+            }
             throw new ApiInvokingError(error.message || error.toString(), {
                 url, options, _developmentError: error?._developmentError ?? undefined
             });

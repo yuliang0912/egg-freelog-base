@@ -593,7 +593,13 @@ export interface IKoaValidateExtend {
      * 当参数值满足一定条件,则忽略此参数,阻止链式调用,且值该为undefined,可以代替optional
      * @param ignoreValues 默认为["", null, undefined]
      */
-    ignoreParamWhenEmpty(this: IKoaValidate, ignoreValues?: any[])
+    ignoreParamWhenEmpty(this: IKoaValidate, ignoreValues?: any[]): IKoaValidate;
+
+    /**
+     * 是否是手机号或邮箱
+     * @param tip
+     */
+    isEmailOrMobile86(this: IKoaValidate, tip?: string): IKoaValidate;
 }
 
 /**
