@@ -203,4 +203,18 @@ export class RestFulWebApis implements IRestfulWebApi {
     get messageV2() {
         return `${this.baseUrl}/client/v2/messages`;
     }
+
+    /**
+     * 微信拓展
+     */
+    get extensionV2() {
+        return `${this.baseUrl}/client/v2/extensions`;
+    }
+
+    /**
+     * 用户组标的物
+     */
+    get iconV2() {
+        return `${this.baseUrl}/client/v2/icons`;
+    }
 }

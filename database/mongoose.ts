@@ -1,4 +1,4 @@
-import {FreelogApplication} from "../index";
+import {FreelogApplication} from '../index';
 
 async function createConnection(app: FreelogApplication, mongoose, config) {
 

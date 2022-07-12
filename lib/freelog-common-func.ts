@@ -70,7 +70,7 @@ export function isClass(fn): boolean {
  * 删除object对象中value = undefined的字段
  * @param target
  */
-export function deleteUndefinedFields(target: object): object {
+export function deleteUndefinedFields<T extends object>(target: T): T {
     for (const [key, value] of Object.entries(target)) {
         if (value === undefined) {
             delete target[key];

@@ -452,7 +452,7 @@ export default {
      * @param tip
      */
     isEmailOrMobile86(this: IKoaValidate, tip?: string) {
-        const mobileOrEmailRegex = /^(1[34578]\d{9})|([A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4})$/;
+        const mobileOrEmailRegex = /^(1[345789]\d{9})|([A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4})$/;
         if (this.goOn && !mobileOrEmailRegex.test(this.value)) {
             this.addError(tip || this.key + ' is not email or mobile.');
         }

@@ -92,6 +92,17 @@ class GatewayAuthenticationError extends ApplicationErrorBase {
 }
 
 /**
+ * 网关认证错误,用户被冻结
+ */
+class GatewayUserFreezeError extends ApplicationErrorBase {
+    constructor(message: string, ...args) {
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.loginUserFreezeError;
+    }
+}
+
+/**
  * 网关服务器组件调用异常
  */
 class GatewayComponentInvokingError extends ApplicationErrorBase {
@@ -157,6 +168,7 @@ export {
     GatewayUpstreamApiError,
     GatewayAuthorizationError,
     GatewayAuthenticationError,
+    GatewayUserFreezeError,
     GatewayComponentInvokingError,
     BreakOffError,
 };

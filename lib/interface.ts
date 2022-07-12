@@ -263,6 +263,16 @@ export interface IRestfulWebApi {
      * 验证码
      */
     messageV2: string;
+
+    /**
+     * 微信拓展
+     */
+    extensionV2: string;
+
+    /**
+     * 用户组标的物
+     */
+    iconV2: string;
 }
 
 /**

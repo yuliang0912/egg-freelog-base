@@ -58,6 +58,9 @@ export enum ErrCodeEnum {
     // db相关错误
     databaseConnectionError = 9,
 
+    // 登录用户被冻结
+    loginUserFreezeError = 10,
+
     // 身份认证失败
     authenticationError = 30,
 
