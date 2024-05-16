@@ -10,7 +10,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 用户信息
-     * @returns {string}
+     * @return {string}
      */
     get userInfo() {
         return `${this.baseUrl}/client/v1/userinfos`;
@@ -18,7 +18,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 资源信息
-     * @returns {string}
+     * @return {string}
      */
     get resourceInfo() {
         return `${this.baseUrl}/client/v1/resources`;
@@ -33,7 +33,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 获取节点信息
-     * @returns {string}
+     * @return {string}
      */
     get nodeInfo() {
         return `${this.baseUrl}/client/v1/nodes`;
@@ -48,7 +48,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 授权方案
-     * @returns {string}
+     * @return {string}
      */
     get authSchemeInfo() {
         return `${this.baseUrl}/client/v1/resources/authSchemes`;
@@ -56,7 +56,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 发行信息
-     * @returns {string}
+     * @return {string}
      */
     get releaseInfo() {
         return `${this.baseUrl}/client/v1/releases`;
@@ -64,7 +64,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 合同信息
-     * @returns {string}
+     * @return {string}
      */
     get contractInfo() {
         return `${this.baseUrl}/client/v1/contracts`;
@@ -72,7 +72,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 授权信息
-     * @returns {string}
+     * @return {string}
      */
     get authInfo() {
         return `${this.baseUrl}/client/v1/auths`;
@@ -80,7 +80,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 用户/节点分组
-     * @returns {string}
+     * @return {string}
      */
     get groupInfo() {
         return `${this.baseUrl}/client/v1/groups`;
@@ -88,7 +88,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 统计计次服务
-     * @returns {string}
+     * @return {string}
      */
     get statisticsInfo() {
         return `${this.baseUrl}/client/v1/statistics`;
@@ -96,7 +96,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 账户信息
-     * @returns {string}
+     * @return {string}
      */
     get accountInfo() {
         return `${this.baseUrl}/client/v1/pay/accounts`;
@@ -104,7 +104,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 支付信息
-     * @returns {string}
+     * @return {string}
      */
     get pay() {
         return `${this.baseUrl}/client/v1/pay`;
@@ -112,17 +112,24 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 存储信息
-     * @returns {string}
+     * @return {string}
      */
     get storageInfo() {
         return `${this.baseUrl}/client/v1/storages`;
     }
 
-    //=============================================V2====================================================
+    // =============================================V2====================================================
+
+    /**
+     * 用户信息
+     */
+    get userInfoV2() {
+        return `${this.baseUrl}/client/v2/users`;
+    }
 
     /**
      * 策略信息
-     * @returns {string}
+     * @return {string}
      */
     get policyInfoV2() {
         return `${this.baseUrl}/client/v2/policies`;
@@ -130,7 +137,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 资源信息
-     * @returns {string}
+     * @return {string}
      */
     get nodeInfoV2() {
         return `${this.baseUrl}/client/v2/nodes`;
@@ -138,7 +145,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 资源信息
-     * @returns {string}
+     * @return {string}
      */
     get resourceInfoV2() {
         return `${this.baseUrl}/client/v2/resources`;
@@ -153,7 +160,7 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 合同信息
-     * @returns {string}
+     * @return {string}
      */
     get contractInfoV2() {
         return `${this.baseUrl}/client/v2/contracts`;
@@ -161,9 +168,53 @@ export class RestFulWebApis implements IRestfulWebApi {
 
     /**
      * 授权信息
-     * @returns {string}
+     * @return {string}
      */
     get authInfoV2() {
         return `${this.baseUrl}/client/v2/auths`;
+    }
+
+    /**
+     * 支付信息
+     * @return {string}
+     */
+    get transactionInfoV2() {
+        return `${this.baseUrl}/client/v2/transactions`;
+    }
+
+    /**
+     * 账户信息
+     * @return {string}
+     */
+    get accountInfoV2() {
+        return `${this.baseUrl}/client/v2/accounts`;
+    }
+
+    /**
+     * 资源解压
+     */
+    get resourceDecompressionV2() {
+        return `${this.baseUrl}/client/v2/resource-decompressions`;
+    }
+
+    /**
+     * 验证码
+     */
+    get messageV2() {
+        return `${this.baseUrl}/client/v2/messages`;
+    }
+
+    /**
+     * 微信拓展
+     */
+    get extensionV2() {
+        return `${this.baseUrl}/client/v2/extensions`;
+    }
+
+    /**
+     * 用户组标的物
+     */
+    get iconV2() {
+        return `${this.baseUrl}/client/v2/icons`;
     }
 }

@@ -1,4 +1,4 @@
-import {PageResult} from "../lib/interface";
+import {PageResult} from '..';
 
 export interface IDataBaseOperation {
 
@@ -100,7 +100,7 @@ export interface IMongodbOperation<T> extends IDataBaseOperation {
      * @param projection
      * @param sort
      */
-    findPageList(condition: number, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]>;
+    findPageList(condition: object, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]>;
 
     /**
      * 查询区间列表,返回分页数据,用于替代findPageList

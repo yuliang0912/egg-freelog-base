@@ -17,7 +17,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
 
     /**
      *当前mongo操作实体
-     * @returns {*}
+     * @return {*}
      */
     get model() {
         if (this._schema.db.readyState !== 1) {
@@ -29,7 +29,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
     /**
      * 聚合查询
      * @param args
-     * @returns {*}
+     * @return {*}
      */
     aggregate(...args): Promise<any> {
         return this.model.aggregate(...args).exec();
@@ -96,7 +96,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
      * @param projection
      * @param sort
      */
-    findPageList(condition: number, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
+    findPageList(condition: object, page?: number, pageSize?: number, projection?: string, sort?: object): Promise<T[]> {
         page = page ?? 1;
         pageSize = pageSize ?? 10;
         return this.model.find(condition, projection, {
@@ -118,7 +118,7 @@ export class MongodbOperation<T> implements IMongodbOperation<T> {
         limit = limit ?? 10;
         const totalItem = await this.count(condition);
         if (totalItem > skip) {
-            let options: any = {skip, limit};
+            const options: any = {skip, limit};
             if (sort) {
                 options.sort = sort;
             }

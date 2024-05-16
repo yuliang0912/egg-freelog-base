@@ -1,4 +1,4 @@
-import {RetCodeEnum, ErrCodeEnum} from './enum'
+import {RetCodeEnum, ErrCodeEnum} from './enum';
 
 class ApplicationErrorBase extends Error {
 
@@ -7,7 +7,7 @@ class ApplicationErrorBase extends Error {
     errCode: ErrCodeEnum;
 
     constructor(message: string, ...args) {
-        super()
+        super();
         const errorName = this.constructor.name;
 
         this.data = args[0];
@@ -74,9 +74,9 @@ class DatabaseConnectionError extends ApplicationErrorBase {
  */
 class GatewayAuthorizationError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
-        this.errCode = ErrCodeEnum.authorizationError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.authorizationError;
     }
 }
 
@@ -85,9 +85,20 @@ class GatewayAuthorizationError extends ApplicationErrorBase {
  */
 class GatewayAuthenticationError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
-        this.errCode = ErrCodeEnum.authenticationError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.authenticationError;
+    }
+}
+
+/**
+ * 网关认证错误,用户被冻结
+ */
+class GatewayUserFreezeError extends ApplicationErrorBase {
+    constructor(message: string, ...args) {
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.loginUserFreezeError;
     }
 }
 
@@ -96,9 +107,9 @@ class GatewayAuthenticationError extends ApplicationErrorBase {
  */
 class GatewayComponentInvokingError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
-        this.errCode = ErrCodeEnum.gatewayHttpComponentInvokingError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.gatewayHttpComponentInvokingError;
     }
 }
 
@@ -107,8 +118,8 @@ class GatewayComponentInvokingError extends ApplicationErrorBase {
  */
 class GatewayRouterMatchError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
     }
 }
 
@@ -117,8 +128,8 @@ class GatewayRouterMatchError extends ApplicationErrorBase {
  */
 class GatewayUpstreamApiError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
     }
 }
 
@@ -127,10 +138,17 @@ class GatewayUpstreamApiError extends ApplicationErrorBase {
  */
 class GatewayArgumentError extends ApplicationErrorBase {
     constructor(message: string, ...args) {
-        super(message, ...args)
-        this.retCode = RetCodeEnum.agentError
-        this.errCode = ErrCodeEnum.argumentError
+        super(message, ...args);
+        this.retCode = RetCodeEnum.agentError;
+        this.errCode = ErrCodeEnum.argumentError;
     }
+}
+
+/**
+ * 中断操作.此错误抛出前需要对响应做好处理.错误拦截器是不会对此错误做出任何反应.只是会中断程序的执行.
+ */
+class BreakOffError extends Error {
+
 }
 
 export {
@@ -150,6 +168,8 @@ export {
     GatewayUpstreamApiError,
     GatewayAuthorizationError,
     GatewayAuthenticationError,
-    GatewayComponentInvokingError
-}
+    GatewayUserFreezeError,
+    GatewayComponentInvokingError,
+    BreakOffError,
+};
 

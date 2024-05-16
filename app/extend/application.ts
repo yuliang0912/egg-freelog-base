@@ -7,6 +7,10 @@ const SEND_MSG_TO_CLUSTER_RANDOM_WORKER_EVENT = Symbol.for(`agent#sendToClusterR
 
 export default {
 
+    get app() {
+        return (this as any) as FreelogApplication;
+    },
+
     /**
      * 内部网络URL地址
      */
@@ -33,4 +37,4 @@ export default {
         this.messenger.sendToAgent(SEND_MSG_TO_CLUSTER_RANDOM_WORKER_EVENT.toString(), {eventName, data});
     },
 
-}
+};

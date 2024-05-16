@@ -1,6 +1,6 @@
 import {EggAppConfig, EggAppInfo, PowerPartial} from 'egg';
-import {FreelogContext, ErrCodeEnum, RetCodeEnum} from "../index";
-import {buildApiFormatData} from '../lib/freelog-common-func'
+import {FreelogContext, ErrCodeEnum, RetCodeEnum} from '../index';
+import {buildApiFormatData} from '../lib/freelog-common-func';
 
 export interface FreelogFrameworkDefaultConfig {
     gatewayUrl: string;
@@ -34,7 +34,7 @@ export default (appInfo: EggAppInfo) => {
     config.onerror = {
         all(err, ctx) {
             ctx.type = 'application/json';
-            ctx.body = buildApiFormatData(RetCodeEnum.success, ErrCodeEnum.autoSnapError, '未处理的异常', err.stack ?? err.toString())
+            ctx.body = buildApiFormatData(RetCodeEnum.success, ErrCodeEnum.autoSnapError, '未处理的异常', err.stack || err.toString());
         }
     };
 

@@ -1,11 +1,10 @@
-import {isObject} from 'util';
 import {FreelogApplication} from './index';
 import koaValidateExtend from './lib/koa-validate-extend';
 import {loaderCustomDirAndFile} from './lib/loader-custom-dir-and-file';
-import mongoose from './database/mongoose'
 import {IBoot} from 'egg';
+import {isObject} from 'lodash';
 
-const koaValidate = require('koa-validate')
+const koaValidate = require('koa-validate');
 
 export default class FreelogBaseFrameworkAppBootHook implements IBoot {
 
@@ -16,35 +15,19 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
     }
 
     configWillLoad() {
-
+        // 下一个大版本再发布.否则需要应用程序修改配置
+        // this.app.config.coreMiddleware.unshift('errorAutoSnapHandler');
+        // const index = this.app.config.coreMiddleware.indexOf('notfound');
+        // if (index > -1) {
+        //     this.app.config.coreMiddleware.splice(index, 1);
+        // }
+        // this.app.config.coreMiddleware.push('gatewayIdentityInfoHandler');
     }
 
     async willReady() {
         this.extendKoaValidateRuleHandle();
         this.loaderCustomDirAndFileHandle();
         this.uncaughtExceptionOrRejectionHandle();
-        await this.connectMongodb();
-        await this.connectRabbit();
-    }
-
-    async connectRabbit() {
-        const config = this.app.config.rabbitMq
-        if (!config || config.enable === false) {
-            return;
-        }
-        const rabbitClient = require('./message-queue/rabbit');
-        await rabbitClient(this.app);
-    }
-
-    /**
-     * 链接mongodb
-     */
-    async connectMongodb() {
-        const mongooseConfig = this.app.config.mongoose;
-        if (!isObject(mongooseConfig) || mongooseConfig.enable === false) {
-            return;
-        }
-        return mongoose(this.app);
     }
 
     /**
@@ -69,13 +52,11 @@ export default class FreelogBaseFrameworkAppBootHook implements IBoot {
      * 未处理的错误处理
      */
     uncaughtExceptionOrRejectionHandle() {
-        // @ts-ignore
-        process.on('unhandledRejection', err => {
-            console.log("process-on-unhandledRejection,[detail]:" + err.toString());
+        process.on('unhandledRejection', (reason: {} | null | undefined) => {
+            console.log('process-on-unhandledRejection,[detail]:', reason);
         });
-        // @ts-ignore
         process.on('uncaughtException', err => {
-            console.log("process-on-uncaughtException,[detail]:" + err.toString());
+            console.log('process-on-uncaughtException,[detail]:' + err.toString());
         });
     }
 }

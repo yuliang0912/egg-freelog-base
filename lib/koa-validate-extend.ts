@@ -1,5 +1,5 @@
 import {ArgumentError, CommonRegex, IKoaValidate} from '../index';
-import {isArray, isFunction, isObject, isString} from 'util';
+import {isFunction, isObject, isString} from 'lodash';
 
 export default {
 
@@ -7,7 +7,7 @@ export default {
      * 此处修改覆盖源代码上的BUG.
      * 源代码上用!this.hasError() && !this.value判断 当this.value = 0或""时,则默认进入判断,导致错误出现
      * @param data
-     * @returns {exports}
+     * @return {exports}
      */
     default(this: IKoaValidate, data: any) {
         if (!this.hasError() && this.value === undefined) {
@@ -33,7 +33,7 @@ export default {
     /**
      * 是否是sha1格式
      * @param tip
-     * @returns {module.exports}
+     * @return {module.exports}
      */
     isSha1(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.sha1.test(this.value)) {
@@ -53,7 +53,7 @@ export default {
     /**
      * 是否发行名(全名)
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isFullResourceName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.fullResourceName.test(this.value)) {
@@ -66,7 +66,7 @@ export default {
     /**
      * resourceType命名规则
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isResourceType(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.resourceType.test(this.value)) {
@@ -78,7 +78,7 @@ export default {
     /**
      * 资源名格式
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isResourceName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.commonNameFormat.test(this.value)) {
@@ -112,7 +112,7 @@ export default {
     /**
      * 是否是合同ID
      * @param tip
-     * @returns {*}
+     * @return {*}
      */
     isContractId(this: IKoaValidate, tip?: string) {
         return this.isMongoObjectId(tip || this.key + ' is not contractId format.');
@@ -121,7 +121,7 @@ export default {
     /**
      * 是否是PresentableId
      * @param tip
-     * @returns {*}
+     * @return {*}
      */
     isPresentableId(this: IKoaValidate, tip?: string) {
         return this.isMongoObjectId(tip || this.key + ' is not presentableId format.');
@@ -131,7 +131,7 @@ export default {
     /**
      * presentable名称
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isPresentableName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.commonNameFormat.test(this.value)) {
@@ -143,7 +143,7 @@ export default {
     /**
      * 是否是用户名格式
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isUsername(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.username.test(this.value)) {
@@ -176,7 +176,7 @@ export default {
     /**
      * 是否bucketName
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isBucketName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.bucketName.test(this.value)) {
@@ -188,7 +188,7 @@ export default {
     /**
      * 是否严格模式的bucketName
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isStrictBucketName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.strictBucketName.test(this.value)) {
@@ -200,7 +200,7 @@ export default {
     /**
      * 是否是分割的mongo-object-Id
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isSplitMongoObjectId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitMongoObjectId.test(this.value)) {
@@ -212,7 +212,7 @@ export default {
     /**
      * 是否是分割的md5
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isSplitMd5(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitMd5.test(this.value)) {
@@ -224,7 +224,7 @@ export default {
     /**
      * 是否是分隔的sha1格式
      * @param tip
-     * @returns {module.exports}
+     * @return {module.exports}
      */
     isSplitSha1(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitSha1.test(this.value)) {
@@ -236,7 +236,7 @@ export default {
     /**
      * 是否是分割的数字
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isSplitNumber(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.splitNumber.test(this.value)) {
@@ -248,7 +248,7 @@ export default {
     /**
      * 节点短域名格式
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isNodeDomain(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.nodeDomain.test(this.value)) {
@@ -260,7 +260,7 @@ export default {
     /**
      * 节点名格式验证
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isNodeName(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.nodeName.test(this.value)) {
@@ -272,7 +272,7 @@ export default {
     /**
      * 是否是交易账户
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isTransferAccountId(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.transferAccountId.test(this.value)) {
@@ -285,7 +285,7 @@ export default {
     /**
      * md5格式校验
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isMd5(this: IKoaValidate, tip?: string) {
         if (this.goOn && !CommonRegex.md5.test(this.value)) {
@@ -299,7 +299,7 @@ export default {
      * @param tip
      */
     isArray(this: IKoaValidate, tip?: string) {
-        if (this.goOn && !isArray(this.value)) {
+        if (this.goOn && !Array.isArray(this.value)) {
             this.addError(tip || this.key + ' is not array.');
         }
         return this;
@@ -326,7 +326,7 @@ export default {
             if (!isString(this.value)) {
                 this.addError(tip || this.key + ' is not string.');
             } else {
-                this.value = this.params[this.key] = this.value.split(split)
+                this.value = this.params[this.key] = this.value.split(split);
             }
         }
         return this;
@@ -340,7 +340,7 @@ export default {
     is(this: IKoaValidate, checkFunc: any, tip?: string) {
 
         if (!isFunction(checkFunc)) {
-            throw new ArgumentError('first argument must be function')
+            throw new ArgumentError('first argument must be function');
         }
         if (this.goOn && !checkFunc(this.value)) {
             this.addError(tip || this.key + ' validate failed.');
@@ -352,9 +352,9 @@ export default {
      * 转换范围版本
      */
     toVersionRange(this: IKoaValidate, tip?: string) {
-        this.isVersionRange(tip)
+        this.isVersionRange(tip);
         if (this.goOn && !this.hasError()) {
-            this.value = this.params[this.key] = require('semver').validRange(this.value)
+            this.value = this.params[this.key] = require('semver').validRange(this.value);
         }
         return this;
     },
@@ -378,10 +378,10 @@ export default {
     /**
      * 是否范围版本
      * @param tip
-     * @returns {exports}
+     * @return {exports}
      */
     isVersionRange(this: IKoaValidate, tip?: string) {
-        let semver = require('semver')
+        const semver = require('semver');
         if (this.goOn && semver.validRange(this.value) === null) {
             this.addError(tip || this.key + ' is not semver range version.');
         }
@@ -399,5 +399,63 @@ export default {
             this.addError(tip || this.key + ' is not range number.');
         }
         return this;
+    },
+
+    /**
+     * 是否是用户ID
+     * @param tip
+     */
+    isUserId(this: IKoaValidate, tip?: string) {
+        if (this.goOn && !CommonRegex.userId.test(this.value)) {
+            this.addError(tip || this.key + ' is not userId.');
+        }
+        return this;
+    },
+
+    /**
+     * 是否是分隔的用户ID
+     * @param tip
+     */
+    isSplitUserIds(this: IKoaValidate, tip?: string) {
+        if (this.goOn && !CommonRegex.splitUserIds.test(this.value)) {
+            this.addError(tip || this.key + ' is not split userId.');
+        }
+        return this;
+    },
+
+    /**
+     * 空字符串视作虚无
+     */
+    emptyStringAsNothingness(this: IKoaValidate) {
+        if (this.goOn && this.value === '') {
+            this.goOn = false;
+            this.value = undefined;
+        }
+        return this;
+    },
+
+    /**
+     *
+     * 当参数值满足一定条件,则忽略此参数,阻止链式调用,且值该为undefined
+     * @param ignoreValues
+     */
+    ignoreParamWhenEmpty(this: IKoaValidate, ignoreValues: any[] = ['', null, undefined]) {
+        if (this.goOn && ignoreValues.includes(this.value)) {
+            this.goOn = false;
+            this.value = undefined;
+        }
+        return this;
+    },
+
+    /**
+     * 是否是手机号或邮箱
+     * @param tip
+     */
+    isEmailOrMobile86(this: IKoaValidate, tip?: string) {
+        const mobileOrEmailRegex = /^(1[345789]\d{9})|([A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4})$/;
+        if (this.goOn && !mobileOrEmailRegex.test(this.value)) {
+            this.addError(tip || this.key + ' is not email or mobile.');
+        }
+        return this;
     }
-}
+};

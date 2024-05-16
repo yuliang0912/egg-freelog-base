@@ -1,4 +1,4 @@
-import {FreelogContext, IdentityTypeEnum} from "../index";
+import {FreelogContext, IdentityTypeEnum} from '../index';
 
 /**
  * 访客身份认证与授权校验
