@@ -217,4 +217,18 @@ export class RestFulWebApis implements IRestfulWebApi {
     get iconV2() {
         return `${this.baseUrl}/client/v2/icons`;
     }
+
+    /**
+     * beta测试
+     */
+    get betaTestV2() {
+        return `${this.baseUrl}/client/v2/testQualifications`;
+    }
+
+    /**
+     * 文件分析
+     */
+    get fileAnalyseV2() {
+        return `${this.baseUrl}/client/v2/fileAnalyse`;
+    }
 }

@@ -48,6 +48,15 @@ export function hmacSha1(text, key, encoding: BinaryToTextEncoding = 'hex') {
 }
 
 /**
+ * sha1加密
+ * @param text 需要加密的内容
+ * @param encoding 数据格式
+ */
+export function sha1(text, encoding: BinaryToTextEncoding = 'hex') {
+    return crypto.createHash('sha1').update(text).digest(encoding);
+}
+
+/**
  * md5加密
  * @param text 需要加密的文本
  * @param encoding 数据格式

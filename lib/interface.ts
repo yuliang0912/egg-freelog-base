@@ -136,7 +136,11 @@ export interface FreelogContext extends Context {
      * @param entity
      * @param options
      */
-    entityNullValueAndUserAuthorizationCheck(entity: object | null, options?: { msg?: string, data?: any, property?: string }): FreelogContext
+    entityNullValueAndUserAuthorizationCheck(entity: object | null, options?: {
+        msg?: string,
+        data?: any,
+        property?: string
+    }): FreelogContext;
 
     /**
      * 校验访客身份认证与授权
@@ -189,6 +193,9 @@ export interface FreelogContext extends Context {
 }
 
 export interface IRestfulWebApi {
+
+    baseUrl: string;
+
     /**
      * 用户信息
      */
@@ -273,6 +280,16 @@ export interface IRestfulWebApi {
      * 用户组标的物
      */
     iconV2: string;
+
+    /**
+     * beta测试
+     */
+    betaTestV2: string;
+
+    /**
+     * 文件分析
+     */
+    fileAnalyseV2: string;
 }
 
 /**
@@ -288,7 +305,7 @@ export interface IJsonSchemaValidate {
 export interface IObjectStorageService {
 
     client;
-    serverProvider: 'aliOss' | 'amazonS3'
+    serverProvider: 'aliOss' | 'amazonS3';
 
     /**
      * 以buffer的形式写入文件
